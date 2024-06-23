@@ -76,6 +76,7 @@
                         </div>
                     </div>
                 </div>
+             
                 <div class="row mb-3">
                     <label class="col-md-3 col-form-label">Geo Location</label>
                     <div class="col-md-9">
@@ -116,8 +117,42 @@
                         </div>
                     </div>
                 </div>
+               
+                 <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Sender</label>
+                    <div class="col-md-9">
+                        <input formControlName="sender" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('sender')?.hasError('required') && addBranchForm.get('sender')?.touched">
+                        <div *ngIf="addBranchForm.get('sender')?.hasError('required') && addBranchForm.get('sender')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                
+            
                 <div class="row mb-3">
-                    <label class="col-md-3 col-form-label">Server Name</label>
+                    <label class="col-md-3 col-form-label">Port Number</label>
+                    <div class="col-md-9">
+                        <input formControlName="portNum" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('portNum')?.hasError('required') && addBranchForm.get('portNum')?.touched">
+                        <div *ngIf="addBranchForm.get('portNum')?.hasError('required') && addBranchForm.get('portNum')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Server Ip </label>
+                    <div class="col-md-9">
+                        <input formControlName="serverIP" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('serverIP')?.hasError('required') && addBranchForm.get('serverIP')?.touched">
+                        <div *ngIf="addBranchForm.get('serverIP')?.hasError('required') && addBranchForm.get('serverIP')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+   <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Server Name </label>
                     <div class="col-md-9">
                         <input formControlName="serverName" class="form-control" type="text"
                             [class.is-invalid]="addBranchForm.get('serverName')?.hasError('required') && addBranchForm.get('serverName')?.touched">
@@ -126,34 +161,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <label class="col-md-3 col-form-label">Port Number</label>
-                    <div class="col-md-9">
-                        <input formControlName="portNumber" class="form-control" type="text"
-                            [class.is-invalid]="addBranchForm.get('portNumber')?.hasError('required') && addBranchForm.get('portNumber')?.touched">
-                        <div *ngIf="addBranchForm.get('portNumber')?.hasError('required') && addBranchForm.get('portNumber')?.touched"
-                            class="invalid-feedback">Field is required
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row mb-3">
-                    <label class="col-md-3 col-form-label">Ip Address</label>
-                    <div class="col-md-9">
-                        <input formControlName="ipAddress" class="form-control" type="text"
-                            [class.is-invalid]="addBranchForm.get('ipAddress')?.hasError('required') && addBranchForm.get('ipAddress')?.touched">
-                        <div *ngIf="addBranchForm.get('ipAddress')?.hasError('required') && addBranchForm.get('ipAddress')?.touched"
-                            class="invalid-feedback">Field is required
-                        </div>
-                    </div>
-                </div>
 
                 <div class="row mb-3">
                     <label class="col-md-3 col-form-label">User Name</label>
                     <div class="col-md-9">
-                        <input formControlName="userName" class="form-control" type="text"
-                            [class.is-invalid]="addBranchForm.get('userName')?.hasError('required') && addBranchForm.get('userName')?.touched">
-                        <div *ngIf="addBranchForm.get('userName')?.hasError('required') && addBranchForm.get('userName')?.touched"
+                        <input formControlName="uName" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('uName')?.hasError('required') && addBranchForm.get('uName')?.touched">
+                        <div *ngIf="addBranchForm.get('uName')?.hasError('required') && addBranchForm.get('uName')?.touched"
                             class="invalid-feedback">Field is required
                         </div>
                     </div>
@@ -163,15 +178,15 @@
                     <label class="col-md-3 col-form-label">Password</label>
                     <div class="col-md-9">
                         <div class="input-group">
-                            <input formControlName="password" class="form-control"
+                            <input formControlName="pWord" class="form-control"
                                 [type]="passwordVisible ? 'text' : 'password'"
-                                [class.is-invalid]="addBranchForm.get('password')?.hasError('required') && addBranchForm.get('password')?.touched">
+                                [class.is-invalid]="addBranchForm.get('pWord')?.hasError('required') && addBranchForm.get('pWord')?.touched">
                             <button class="btn btn-outline-secondary" type="button"
                                 (click)="togglePasswordVisibility()">
                                 {{ passwordVisible ? 'Hide' : 'Show' }}
                             </button>
                         </div>
-                        <div *ngIf="addBranchForm.get('password')?.hasError('required') && addBranchForm.get('password')?.touched"
+                        <div *ngIf="addBranchForm.get('pWord')?.hasError('required') && addBranchForm.get('pWord')?.touched"
                             class="invalid-feedback">Field is required
                         </div>
                     </div>
@@ -197,9 +212,19 @@
                 <div class="row mb-3">
                     <label class="col-md-3 col-form-label">Api Link</label>
                     <div class="col-md-9">
-                        <input formControlName="apiLink" class="form-control" type="text"
-                            [class.is-invalid]="addBranchForm.get('apiLink')?.hasError('required') && addBranchForm.get('apiLink')?.touched">
-                        <div *ngIf="addBranchForm.get('apiLink')?.hasError('required') && addBranchForm.get('apiLink')?.touched"
+                        <input formControlName="spapiLink" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('spapiLink')?.hasError('required') && addBranchForm.get('spapiLink')?.touched">
+                        <div *ngIf="addBranchForm.get('spapiLink')?.hasError('required') && addBranchForm.get('spapiLink')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+<div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Database Name</label>
+                    <div class="col-md-9">
+                        <input formControlName="dbName" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('dbName')?.hasError('required') && addBranchForm.get('dbName')?.touched">
+                        <div *ngIf="addBranchForm.get('dbName')?.hasError('required') && addBranchForm.get('dbName')?.touched"
                             class="invalid-feedback">Field is required
                         </div>
                     </div>
