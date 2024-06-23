@@ -40,14 +40,13 @@ export class BranchesService {
         catchError(this.handleError)
       );
   }
-  editBranch(branch:createBranch): Observable<any> {
-    const url = `${this.baseUrl}/api/EditBranch`;
-    return this.http.put(url,branch)
+ editBranch(branch: createBranch): Observable<any> {
+    const url = `http://service.themagsmen.com/api/EditBranch/1`;
+    return this.http.post(url, branch)
       .pipe(
         catchError(this.handleError)
       );
-  }
-
+}
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An error occurred';
     if (error.error instanceof ErrorEvent) {

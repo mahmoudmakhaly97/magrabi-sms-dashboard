@@ -8,13 +8,17 @@ export class createBranch {
     regionID: number;
     bearerT: string;
     areaID?: number;
-    emailsAdmin: string;
+    spapiLink?: string;
+    sender?:string;
+    serverIP?:string;
+     emailsAdmin: string;
     mobilesAdmin: string;
     serverName: string;
-    portNumber: string;
-    userName: string;
-    password: string;
+    portNum: string;
+    uName: string;
+    pWord: string;
     apiLink: string;
     serviceProviderAccessToken: string;
     ipAddress: string;
+    dbName: string;
 }

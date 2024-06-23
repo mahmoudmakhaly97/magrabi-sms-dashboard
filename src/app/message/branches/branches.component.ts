@@ -97,6 +97,7 @@ export class BranchesComponent {
   }
   createBranchForm(branchModel?: createBranch) {
     this.addBranchForm = this.formBuilder.group({
+      id: [branchModel?.id ?? ''],
       name: [branchModel?.name ?? '', [Validators.required]],
       nameAr: [branchModel?.nameAr ?? '', [Validators.required]],
       branchCode: [branchModel?.branchCode ?? '', [Validators.required]],
@@ -105,15 +106,19 @@ export class BranchesComponent {
       regionID: [branchModel?.regionID ?? '', [Validators.required]],
       bearerT: [branchModel?.bearerT ?? '', [Validators.required]],
       areaID: [branchModel?.areaID ?? '', [Validators.required]],
+      spapiLink: [branchModel?.spapiLink ?? '', [Validators.required]],
+      sender: [branchModel?.sender ?? '', [Validators.required]],
+      serverIP: [branchModel?.serverIP ?? '', [Validators.required]],
       emailsAdmin: [branchModel?.emailsAdmin ?? '', [Validators.required]],
       mobilesAdmin: [branchModel?.mobilesAdmin ?? '', [Validators.required]],
       serviceProviderAccessToken: [branchModel?.serviceProviderAccessToken ?? '', [Validators.required]],
       ipAddress: [branchModel?.ipAddress ?? '', [Validators.required]],
       serverName: [branchModel?.serverName ?? '', [Validators.required]],
-      portNumber: [branchModel?.portNumber ?? '', [Validators.required]],
+      portNum: [branchModel?.portNum ?? '', [Validators.required]],
       apiLink: [branchModel?.apiLink ?? '', [Validators.required]],
-      userName: [branchModel?.userName ?? '', [Validators.required]],
-      password: [branchModel?.password ?? '', [Validators.required]],
+      uName: [branchModel?.uName ?? '', [Validators.required]],
+      pWord: [branchModel?.pWord ?? '', [Validators.required]],
+      dbName: [branchModel?.dbName ?? '', [Validators.required]],
     })
   }
 
@@ -240,7 +245,7 @@ export class BranchesComponent {
   }
 
   editBranch(branch: any) {
-    console.log(branch)
+    console.log("branchh", branch)
     this.updateBranchForm(branch);
     this.setBearerToken(branch.regionID);
     this.getAllAreasListById(branch.regionID)
@@ -251,15 +256,26 @@ export class BranchesComponent {
   async updateBranchForm(branchModel?: createBranch) {
     // Then update the form values
     this.addBranchForm.patchValue({
-      name: branchModel?.name,
-      nameAr: branchModel?.nameAr,
-      branchCode: branchModel?.branchCode,
-      geoLocation: branchModel?.geoLocation,
-      googleReviewLink: branchModel?.googleReviewLink,
-      regionID: branchModel?.regionID,
-      areaID: branchModel?.areaID,
-      emailsAdmin: branchModel?.emailsAdmin,
-      mobilesAdmin: branchModel?.mobilesAdmin
+      id: branchModel?.id ?? '',
+      regionID: branchModel?.regionID ?? '',
+      areaID: branchModel?.areaID ?? '',
+      name: branchModel?.name ?? '',
+      branchCode: branchModel?.branchCode ?? '',
+      geoLocation: branchModel?.geoLocation ?? '',
+      googleReviewLink: branchModel?.googleReviewLink ?? '',
+ emailsAdmin: branchModel?.emailsAdmin ?? '',
+      mobilesAdmin: branchModel?.mobilesAdmin ?? '',
+      spapiLink: branchModel?.spapiLink ?? '',
+      sender : branchModel?.sender ?? '',
+      serverIP : branchModel?.serverIP ?? '',
+ portNum      : branchModel?.portNum ?? '',
+      nameAr: branchModel?.nameAr ?? '',
+      bearerT: branchModel?.bearerT ?? '',
+      pWord: branchModel?.pWord ?? '',
+      dbName: branchModel?.dbName ?? '',
+      uName: branchModel?.uName ?? '',
+
+       
     });
   }
 
