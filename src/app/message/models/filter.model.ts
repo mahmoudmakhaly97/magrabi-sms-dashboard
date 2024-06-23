@@ -1,0 +1,19 @@
+export interface filterModel{
+    id?:number;
+    statusCode?:any;
+    messageId?:number;
+    cost?:string;
+    currency?:string;
+    totalCount?:string;
+    msgLength?:string;
+    accepted?:string;
+    rejected?:string;
+    dtTo?:string;
+    dtFrom?:string;
+    bearerToken?:string;
+    templateId?:number;
+    phoneNumber?:number;
+    regionID?:number;
+    areaID?:number;
+    branchID?:number;
+}

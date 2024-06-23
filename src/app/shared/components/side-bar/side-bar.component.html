@@ -1,0 +1,57 @@
+
+
+  <nav class="sidebar sidebar-dark">
+    <button (click)="closeSideMenu()" type="button" class="btn-close" ></button>
+    <a href="#" class="sidebar-brand">
+      <img src="../../../../assets/images/magrabi-logo.png" alt="logo">
+      <span class="ms-1">
+        <span>Magrabi Hospitals©</span>
+        <!-- <img src="../../../../assets/images/maragbi-lg-logo-2.png" alt="logo"> -->
+      </span>
+    </a>
+    <ul id="nav_accordion" class="sidebar-nav">
+      <li class="sidebar-nav-item">
+        <a routerLink="/dashboard"routerLinkActive="active" class="sidebar-nav-link">
+          <i class="fi fi-rr-dashboard"></i>
+          <span class="item-name">Dashboard</span>
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a  routerLink="/users"  class="sidebar-nav-link">
+          <i class="fi fi-rr-book-user"></i>
+          <span class="item-name">Users</span>
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a routerLink="/messages/quick-message" routerLinkActive="active" class="sidebar-nav-link">
+          <i class="fi-rr-users-alt"></i>
+          <span class="item-name">Quick Sms</span>
+        </a>
+      </li>
+
+      <li class="sidebar-nav-item">
+        <a routerLink="/messages/sms-history" class="sidebar-nav-link">
+          <i class="fi fi-rr-document"></i>
+          <span class="item-name">Sms History</span>
+        </a>
+      </li>
+      <!-- <li class="sidebar-nav-item">
+        <a routerLink="/messages/template-queue"  class="sidebar-nav-link">
+          <i class="fi fi-rr-building"></i>
+          <span class="item-name">Template Queue</span>
+        </a>
+      </li> -->
+      <li class="sidebar-nav-item">
+        <a routerLink="/messages/branches"  class="sidebar-nav-link">
+          <i class="fi fi-rr-building"></i>
+          <span class="item-name">Branches</span>
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a routerLink="/messages/config-message"  routerLinkActive="actve" class="sidebar-nav-link">
+          <i class="fi fi-rr-settings-sliders"></i>
+          <span class="item-name">Template Configuration</span>
+        </a>
+      </li>
+  </ul>
+  </nav><!--sidebar--->

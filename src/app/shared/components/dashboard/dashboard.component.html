@@ -1,0 +1,221 @@
+
+<p-toast></p-toast>
+<app-loading-indicator *ngIf="showLoader"></app-loading-indicator>
+<section class="page-content">
+
+  <div class="page-title">
+    <h4 class="page-title-text me-auto">Dashboard</h4>
+    <div class="page-title-end d-flex align-items-center">
+      <!-- <input type="date" class="form-control form-control-sm"> -->
+      <h4 class="page-title-text me-auto me-2">Filter Option</h4>
+      <a (click)="getStatistics()" class="btn btn-secondary btn-sm ms-1"><i class="fi fi-rr-refresh"></i></a>
+      <a (click)="showFilter = !showFilter" class="btn btn-primary btn-sm ms-1"><i class="fi fi-rr-filter"></i></a>
+    </div>
+  </div>
+
+  <div class="content">
+    <div *ngIf="showFilter" [formGroup]="getAnalyticForm" class="row my-4">
+      <label class="col-md-auto col-form-label">Regions</label>
+      <div class="col-md-3">
+          <select
+              class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy"
+              formControlName="regionID"
+              [(ngModel)]="selectedregionID" 
+              (change)="onRegionChange()" 
+              [class.is-invalid]="getAnalyticForm.get('regionID')?.hasError('required') && getAnalyticForm.get('regionID')?.touched"
+              >
+              <option value="" selected >Select Region</option>
+              <option value="1" >Egypt</option>
+              <option value="2" >KSA</option>
+              <option value="3" >UAE</option>
+              <option value="4" >QATAR</option>
+          </select>
+          <div *ngIf="getAnalyticForm.get('regionID')?.hasError('required') && getAnalyticForm.get('regionID')?.touched"
+              class="invalid-feedback">Field is required
+          </div>
+      </div>
+      <label class="col-md-auto col-form-label">Area</label>
+      <div class="col-md-3">
+          <select
+              class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy"
+              formControlName="areaID"
+              [(ngModel)]="selectedAreaID" 
+              (change)="onAreaChange()" 
+              [class.is-invalid]="getAnalyticForm.get('areaID')?.hasError('required') && getAnalyticForm.get('areaID')?.touched"
+              >
+              <option value="" selected >Select Area</option>
+              <option *ngFor="let area of allAreaList" [value]="area.id"  class="f-ar" >{{area.name}}| <span class="f-ar">{{area.nameAr}}</span></option>
+          </select>
+          <div *ngIf="getAnalyticForm.get('areaID')?.hasError('required') && getAnalyticForm.get('areaID')?.touched"
+              class="invalid-feedback">Field is required
+          </div>
+      </div>
+      <label class="col-md-auto col-form-label">Branch</label>
+      <div class="col-md-3">
+          <select
+              class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy"
+              formControlName="branchID"
+              [(ngModel)]="selectedBranchID" 
+              (change)="onBranchChange()" 
+              [class.is-invalid]="getAnalyticForm.get('branchID')?.hasError('required') && getAnalyticForm.get('branchID')?.touched"
+              >
+              <option value="" selected >Select Branch</option>
+              <option *ngFor="let branch of allBranchList" [value]="branch.id"  class="f-ar" >{{branch.name}}| <span class="f-ar">{{branch.nameAr}}</span></option>
+          </select>
+          <div *ngIf="getAnalyticForm.get('branchID')?.hasError('required') && getAnalyticForm.get('branchID')?.touched"
+              class="invalid-feedback">Field is required
+          </div>
+      </div>
+      <div class="col-md">
+        <button [disabled]="!getAnalyticForm.valid" (click)="submit()" class="btn btn-primary btn-sm ms-1">
+         Get Data
+      </button>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+
+      <div class="col-md-6 col-xl-3">
+        <div class="card-count h-100">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+            <i class="fi fi-rr-file-user"></i>
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <div class="d-flex align-items-center justify-content-between">
+                <span>Account Status</span>
+                <span [ngClass]="dataObject?.accountExpiryDate!='active'?'text-bg-success':'text-bg-danger'" class="badge rounded-pill ">{{dataObject?.accountStatus }}</span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between">
+                <span>Account Expire</span>
+                <span class="badge rounded-pill text-bg-primary">{{dataObject?.accountExpiryDate }}</span>
+              </div>
+            </div>
+          </div>
+        </div><!--boxCount-->
+      </div><!--col-->
+
+      <div class="col-md-6 col-xl-3">
+        <div class="card-count color-2 h-100">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+            <i class="fi fi-rr-users"></i>
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <div class="d-flex align-items-center justify-content-between">
+                <h2>{{dataObject?.balance }}</h2>
+                <span class="badge rounded-pill text-bg-primary">{{dataObject?.currency }}</span>
+              </div>
+            
+            <span>Account Balance</span>
+            </div>
+          </div>
+        </div><!--boxCount-->
+      </div><!--col-->
+
+    </div><!--row-->
+    
+    <!-- <div class="row g-4 mb-4">
+      <div class="col-lg-6 col-xl-9">
+        <div class="card card-widget h-100">
+          <div class="card-body">
+            <div class="card-title"><h4>Weekly Sms</h4></div>
+            <div class="row text-center">
+              <div class="col-4">
+                <h5 class="mb-0">2541</h5>
+                <p class="text-muted text-truncate">Activated</p>
+              </div>
+              <div class="col-4">
+                <h5 class="mb-0">84845</h5>
+                <p class="text-muted text-truncate">Pending</p>
+              </div>
+              <div class="col-4">
+                <h5 class="mb-0">12001</h5>
+                <p class="text-muted text-truncate">Deactivated</p>
+              </div>
+            </div>
+            <div class="chartjs-chart">
+              <canvas class="chartjs-chart" baseChart [datasets]="lineBarChart.datasets" [type]="'bar'" [options]="lineBarChart.options" height="300" [labels]="lineBarChart.labels">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    
+    <div class="row g-4">
+      <div class="col-md-6 col-xl-4">
+        <div class="card-widget h-100">
+          <div class="card-title"><h4>List of Roles</h4></div>
+          <ul class="roles-list">
+            <li><a>Super Admin</a></li>
+            <li><a>Egypt Regional Manager</a></li>
+            <li><a>KSA Regional Manager</a></li>
+            <li><a>UAE Regional Manager</a></li>
+            <li><a>QATAR Regional Manager</a></li>
+          </ul>
+        </div><!--card-widget-->
+      </div><!--col-->
+      <div class="col-md-6 col-xl-4">
+        <div class="card-widget h-100">
+          <div class="card-title"><h4>List of User</h4></div>
+          <ul class="roles-list">
+            <li *ngFor="let user of allUserList"><a >{{user.userName}}</a></li>
+          </ul>
+        </div><!--card-widget-->
+      </div><!--col-->
+      <div class="col-lg-6 col-xl-4">
+        <div class="card-widget h-100">
+          <div class="card-title"><h4>Daily Consumption by Country (SAR)</h4></div>
+          <div class="row text-center">
+            <div class="col-6">
+              <h5 class="mb-0">2536</h5>
+              <p class="text-muted text-truncate">Total Consumption</p>
+            </div>
+            <div class="col-6">
+              <h5 class="mb-0">69421</h5>
+              <p class="text-muted text-truncate">Daily Buying Processes</p>
+            </div>
+          </div>
+          <div class="chartjs-chart">
+            <!-- Line Chart -->
+            <canvas class="chartjs-chart" baseChart [datasets]="pieChart.datasets" [type]="'pie'" [labels]="pieChart.labels" [options]="pieChart.options">
+            </canvas>
+          </div>
+        </div><!--card-widget-->
+      </div>
+      <!--col-->
+      <div class="col-xl">
+        <div class="card-widget h-100">
+          <div class="card-title"><h4>Latest Branches</h4></div>
+          <div class="table-responsive-xl">
+            <table class="table tableTheme2 table-sm m-0">
+              <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Arabic Name</th>
+                <th scope="col">Branch Code</th>
+                <th scope="col">Geo Location</th> 
+                <th scope="col"> Google Review Link</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let branch of allBranchList">
+                <td>{{branch.name}}</td>
+                <td class="f-ar">{{branch.nameAr}}</td>
+                <td>{{branch.branchCode}}</td>
+                <td><a [href]="branch.geoLocation" target="_blank">{{branch.geoLocation}}</a></td>
+                <td><a [href]="branch.googleReviewLink" target="_blank">{{branch.googleReviewLink}}</a></td>
+              </tr>
+
+              </tbody>
+            </table>
+          </div><!--table-responsive-->
+        </div><!--card-widget-->
+      </div>
+    </div><!--row-->
+    
+
+  </div><!--content-->
+
+</section>

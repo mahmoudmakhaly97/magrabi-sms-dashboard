@@ -1,0 +1,137 @@
+<app-page-title title="Quick Sms " [breadcrumbItems]="breadCrumbItems"></app-page-title>
+<!-- <app-message-control></app-message-control>
+<app-users-table></app-users-table> -->
+<p-toast></p-toast>
+<app-loading-indicator *ngIf="showLoader"></app-loading-indicator>
+<div class="container-fluid">
+    <form  [formGroup]="quickMessageForm" class="">    
+        <div class="content">
+        <div class="card-widget mt-5">
+            <div class="container-s">
+                    <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">Send From</label>
+                        <div class="col-md-9">
+                            <select  [(ngModel)]="selectedCountry" 
+                                (change)="onCountryChange()"
+                                formControlName="country"
+                                class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Bitcoin">
+                                <option value="" selected="" >Select Country</option>
+                                <option value="1" >Egypt	</option>
+                                <option value="2" >KSA	</option>
+                                <option value="3" >	UAE</option>
+                                <option value="4" >	Qatar</option>
+                            </select>
+                            <div *ngIf="quickMessageForm.get('country')?.hasError('required') && quickMessageForm.get('country')?.touched"
+                                class="invalid-feedback">Field is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">To Multiple Phone Numbers</label>
+                        <div class="col-md-9">
+                            <input 
+                            formControlName="file" class="form-control" type="file" (change)="onFileChange($event)" placeholder="Numbers seprated by (,)"
+                            [class.is-invalid]="quickMessageForm.get('file')?.hasError('required') && quickMessageForm.get('file')?.touched"> 
+                            <div *ngIf="quickMessageForm.get('file')?.hasError('required') && quickMessageForm.get('file')?.touched"
+                            class="invalid-feedback">Field is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">Sms Content</label>
+                        <div class="col-md-9">
+                            <textarea formControlName="content" class="form-control" rows="3" style="height: auto;"
+                            [class.is-invalid]="quickMessageForm.get('content')?.hasError('required') && quickMessageForm.get('content')?.touched" ></textarea>
+                            <div *ngIf="quickMessageForm.get('content')?.hasError('required') && quickMessageForm.get('content')?.touched"
+                            class="invalid-feedback">Field is required
+                            </div>
+                        </div>
+                    </div>
+
+            </div><!--container-sm-->
+    
+        </div><!--card-widget-->
+        </div><!--content-->
+    </form>
+
+    <div class="content mt-5">
+        <div class="card-widget">
+            <div class="page-title">
+                <h4 class="page-title-text me-auto">View Exported Data</h4>
+                <button [disabled]="!quickMessageForm.valid || isButtonDisabled " (click)="submit()" 
+                        type="submit" class="btn btn-primary w-xl btn-sm ms-1">Send Quick Sms
+                </button>
+              </div>
+    
+          <div class="table-search ms-auto">
+            <i class="fi fi-rr-search"></i>
+            <input type="text" class="form-control form-control-sm" placeholder="Search..">
+          </div>
+    
+          <div class="table-responsive">
+            <p-table
+            [value]="customers"
+            [paginator]="true"
+            [rows]="5"
+            [showCurrentPageReport]="true"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [rowsPerPageOptions]="[5, 10, 20]"
+            class="table table-striped"
+            >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width:10%">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th style="width:25%">Name</th>
+                    <th style="width:25%">Phone Number</th>
+                    <th style="width:20%">Country</th>
+                    <th style="width:15%">Valid Status</th>
+                    <th style="width:25%">Status</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-customer>
+                <tr [class.invalid]="!customer.valid">
+                    <td>
+                        <p-tableCheckbox [value]="customer"></p-tableCheckbox>
+                    </td>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.phoneNumber}}</td>
+                    <td>
+                        <img  class="flag-icon"   
+                            [src]="selectedCountry=='Egypt'?'../../../assets/images/flags/egypt.png':
+                            selectedCountry=='KSA'?'../../../assets/images/flags/ksa.png':
+                            selectedCountry=='Qatar'?'../../../assets/images/flags/qatar.jpg':
+                            selectedCountry=='UAE'?'../../../assets/images/flags/uae.png':''">
+                        {{selectedCountry}}
+                    </td>
+                    <td *ngIf="!customer.valid">                                
+                        <span class="badge rounded-pill text-bg-danger">Invalid Number</span>
+                    </td>
+                    <td *ngIf="customer.valid">                                
+                        <span class="badge rounded-pill text-bg-success">Valid Number</span>
+                    </td>
+                    <td>                                
+                        <span class="badge rounded-pill text-bg-primary">not send</span>
+                    </td>
+                </tr>
+            </ng-template>
+            <tr>
+                <td colspan="6">
+                <div class="error-s">
+                  <i><img src="../../../../assets/images/empty-page.svg" alt=""/></i>
+                  <h1><span>No</span> Data Found <span>!</span></h1>
+                </div><!--error-s-->
+                </td>
+            </tr>  
+            
+            </p-table>
+      
+          </div>
+        </div><!--card-widget-->
+    </div>
+                   
+</div>
+
+

@@ -1,0 +1,145 @@
+<app-page-title title="Add Users" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+<p-toast></p-toast>
+<app-loading-indicator *ngIf="showLoader"></app-loading-indicator>
+<form  [formGroup]="addUserForm">
+    <div class="page-title">
+    <h4 class="page-title-text me-auto"></h4>
+    <div class="page-title-end mt-4">
+        <a (click)="reset()" class="btn btn-outline-dark btn-sm ms-1">Cancel</a>
+        <button  [disabled]="!addUserForm.valid" (click)="submit()" class="btn btn-primary btn-sm ms-1">Add User</button>
+    </div>
+    </div>
+
+    <div class="content">
+    <div class="card-widget">
+        <div class="container-s">
+            <div class="row mb-3">
+                <label class="col-md-3 col-form-label">Regions</label>
+                <div class="col-md-9">
+                    <select
+                        class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy"
+                        formControlName="roleID"
+                        [(ngModel)]="selectedregionID" 
+                        (change)="onRegionChange()" 
+                        [class.is-invalid]="addUserForm.get('roleID')?.hasError('required') && addUserForm.get('roleID')?.touched"
+                        >
+                        <option value="" selected >Select Region</option>
+                        <option value="EgyptAdmin"  >Egypt</option>
+                        <option value="KSAAdmin" >KSA</option>
+                        <option value="UAEAdmin" >UAE</option>
+                        <option value="Qatar" >QATAR</option>
+                    </select>
+                    <div *ngIf="addUserForm.get('roleID')?.hasError('required') && addUserForm.get('roleID')?.touched"
+                        class="invalid-feedback">Field is required
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-md-3 col-form-label">Username</label>
+                <div class="col-md-9">
+                    <input formControlName="username" class="form-control" type="text" 
+                    [class.is-invalid]="addUserForm.get('username')?.hasError('required') && addUserForm.get('username')?.touched"> 
+                    <div *ngIf="addUserForm.get('username')?.hasError('required') && addUserForm.get('username')?.touched"
+                    class="invalid-feedback">Field is required
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-md-3 col-form-label">User Email</label>
+                <div class="col-md-9">
+                    <input formControlName="email" class="form-control" type="email"
+                    [class.is-invalid]="addUserForm.get('email')?.hasError('required') && addUserForm.get('email')?.touched" >
+                    <div *ngIf="addUserForm.get('email')?.hasError('required') && addUserForm.get('email')?.touched"
+                    class="invalid-feedback">Field is required
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-md-3 col-form-label">User Password</label>
+                <div class="col-md-9">
+                    <input formControlName="password" class="form-control" type="password" 
+                    [class.is-invalid]="addUserForm.get('password')?.hasError('required') && addUserForm.get('password')?.touched" >
+                    <div *ngIf="addUserForm.get('password')?.hasError('required') && addUserForm.get('password')?.touched"
+                    class="invalid-feedback">Field is required
+                </div>
+                </div>
+            </div>
+        </div><!--container-sm-->
+
+    </div><!--card-widget-->
+    </div><!--content-->
+</form>
+
+
+
+  <div class="content mt-5">
+    <div class="card-widget">
+        <div class="page-title">
+            <h4 class="page-title-text me-auto">UserList</h4>
+          </div>
+
+      <div class="table-search ms-auto">
+        <i class="fi fi-rr-search"></i>
+        <input type="text" class="form-control form-control-sm" placeholder="Search..">
+      </div>
+
+      <div class="table-responsive">
+        <p-table
+        [value]="allUserList"
+        [paginator]="true"
+        [rows]="5"
+        [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        class="table table-striped"
+        >
+        <ng-template pTemplate="header">
+            <tr>
+                <!-- <th style="width:10%">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th> -->
+                <th style="width:15%">Name</th>
+                <th style="width:15%">Role</th>
+                <th style="width:20%">Email</th>
+                <th style="width:15%">Country</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-customer>
+            <tr     >
+                <!-- <td>
+                    <p-tableCheckbox [value]="customer"></p-tableCheckbox>
+                </td> -->
+                <td>{{ customer.userName }}</td>
+                <td>
+                    <span *ngIf="customer.phoneNumber=='SuperAdmin'" class="badge rounded-pill text-bg-danger">{{ customer.phoneNumber}}</span>
+                    <span *ngIf="customer.phoneNumber!='SuperAdmin'" class="badge rounded-pill text-bg-info">{{ customer.phoneNumber}}</span>
+                </td>
+                <td>{{ customer.email}}</td>
+                <td>
+                    <img class="flag-icon"
+                        [src]="(customer.phoneNumber).includes('Egypt')?'../../../assets/images/flags/egypt.png':
+                        (customer.phoneNumber).includes('KSA')?'../../../assets/images/flags/ksa.png':
+                        (customer.phoneNumber).includes('Qatar')?'../../../assets/images/flags/qatar.jpg':
+                        (customer.phoneNumber).includes('UAE')?'../../../assets/images/flags/uae.png':''">
+                    {{customer.phoneNumber}}
+                </td>
+             
+            </tr>
+        </ng-template>
+        <tr>
+            <td colspan="6">
+            <div class="error-s">
+              <i><img src="../../../../assets/images/empty-page.svg" alt=""/></i>
+              <h1><span>No</span> Data Found <span>!</span></h1>
+            </div><!--error-s-->
+            </td>
+        </tr>
+        
+        </p-table>
+      </div>
+    </div><!--card-widget-->
+  </div>
+
+
+

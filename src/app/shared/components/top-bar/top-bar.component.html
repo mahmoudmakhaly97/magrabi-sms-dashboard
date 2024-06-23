@@ -1,0 +1,135 @@
+
+
+  <header class="topbar">
+  
+    <a href="#" class="logo-sm">
+      <img src="../../../../assets/images/magrabi-lg-logo.png" alt="logo" class="logo-light">
+      <!-- <img src="../../../../assets/img/logo-1-dark.svg" alt="logo" class="logo-dark"> -->
+    </a>
+
+    <button (click)="toggleSideMenu()" class="sidebar-toggle" type="button">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+
+    <!-- <form class="d-none d-lg-flex">
+      <input class="form-control form-control-sm me-1" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-sm btn-outline-primary" type="submit">Search</button>
+    </form> -->
+
+    <ul class="topbar-menu ms-auto">
+      <li class="dropdown">
+        <a  class="nav-link" type="button" >
+          <i class="topbar-menu-icon me-2"><img src="../../../../assets/images/egypt.svg" alt="flag"></i> Ar
+        </a>
+        <!-- <a class="nav-link" type="button" >
+          <i class="topbar-menu-icon me-2"><img src="../../../../assets/images/united-kingdom.svg" alt="flag"></i> EN
+        </a> -->
+      </li>
+      <li class="dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+          <i class="fi fi-rr-bell-ring topbar-menu-icon"></i>
+        </a>
+        <div class="dropdown-menu notify dropdown-menu-end">
+          <div class="dropdown-header">
+            <div class="row">
+              <div class="col"><h6>Notification</h6></div>
+              <div class="col-auto"><a href="#"><small>Clear All</small></a></div>
+            </div>
+          </div>
+          <div class="notify-body">
+            <div class="date">Today</div>
+
+            <a class="dropdown-item alert" href="#">
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="flex-shrink-0">
+                  <div class="notify-icon"><i class="fi fi-rr-info"></i></div>
+                </div>
+                <div class="flex-grow-1 ms-2">
+                  <h5 class="notify-title">Admin <small class="time ms-1">1 min ago</small></h5>
+                  <small class="notify-subtitle">New user registered</small>
+                </div>
+              </div>
+            </a>
+
+            <a class="dropdown-item alert" href="#">
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="flex-shrink-0">
+                  <div class="notify-icon bg-info"><i class="fi fi-rr-comment-alt"></i></div>
+                </div>
+                <div class="flex-grow-1 ms-2">
+                  <h5 class="notify-title">Ayman Eid <small class="time ms-1">1 hours ago</small></h5>
+                  <small class="notify-subtitle">Wow ! this admin looks good and awesome design</small>
+                </div>
+              </div>
+            </a>
+
+            <div class="date">Yesterday</div>
+
+            <a class="dropdown-item alert" href="#">
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="flex-shrink-0">
+                  <div class="notify-icon bg-warning"><i class="fi fi-rr-triangle-warning"></i></div>
+                </div>
+                <div class="flex-grow-1 ms-2">
+                  <h5 class="notify-title">Dummy Text</h5>
+                  <small class="notify-subtitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</small>
+                </div>
+              </div>
+            </a>
+
+            <div class="date">30 Dec 2023</div>
+
+            <a class="dropdown-item alert" href="#">
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="flex-shrink-0">
+                  <div class="notify-icon"><i class="fi fi-rr-info"></i></div>
+                </div>
+                <div class="flex-grow-1 ms-2">
+                  <h5 class="notify-title">User Name</h5>
+                  <small class="notify-subtitle">New user registered</small>
+                </div>
+              </div>
+            </a>
+
+            <a class="dropdown-item alert" href="#">
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="flex-shrink-0">
+                  <div class="notify-icon"><i class="fi fi-rr-info"></i></div>
+                </div>
+                <div class="flex-grow-1 ms-2">
+                  <h5 class="notify-title">Admin</h5>
+                  <small class="notify-subtitle">New user registered</small>
+                </div>
+              </div>
+            </a>
+
+          </div><!--notify-body-->
+          <div class="dropdown-footer"><a class="dropdown-item" href="#">View All</a></div>
+        </div>        
+      </li>
+      <li>
+        <button class="nav-link theme-toggle" type="button" id="theme-toggle"><i class="fi fi-rr-moon-stars topbar-menu-icon"></i></button>
+      </li>
+      <li class="dropdown user-nav">
+        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="user-avatar"><img src="../../../../assets/images/user-pic.jpg" alt="user photo"></span>
+          <span class="user-name d-none d-md-inline">
+            <h6>{{username}}</h6>
+            <small>{{userRole}}</small>
+          </span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#"><i class="fi fi-rr-circle-user"></i> My Account</a></li>
+          <!-- <li><a class="dropdown-item" href="#"><i class="fi fi-rr-settings"></i> Settings</a></li> -->
+          <!-- <li><a class="dropdown-item" href="#"><i class="fi fi-rr-life-ring"></i> Support</a></li> -->
+          <li><a  (click)="logout()"  class="dropdown-item" href="#"><i class="fi fi-rr-sign-out-alt"></i> Logout</a></li>
+        </ul>        
+      </li>
+    </ul><!--topbar-menu-->
+    
+  </header>

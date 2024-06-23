@@ -1,0 +1,16 @@
+.run-tab{
+    i{
+        font-size: 20px;
+        cursor: pointer;
+    }
+}
+.nav{
+    .nav-item{
+        .active{    
+            background-color: #3687f6;
+            color: #fff;}
+        .nav-link{
+            font-size: 16px;
+        }
+    }
+}

@@ -1,0 +1,48 @@
+.login-conatiner{
+    background-image: url('../../../assets/images/Login_BG.png');
+    background-size: 100% 100%;
+    height: 100%;
+    // background-image: linear-gradient(to top, #3687f6 0%, #4ec4ff 100%); 
+    .login-logo{
+        @media (min-width:300px) {width: 300px;}
+    }  
+    .login-title{
+        font-size: 2.2rem;
+        padding: 0.2rem 3.2rem;
+        color: #255a8a;
+        @media (max-width:991px) {padding-bottom: 3rem;}
+        @media (max-width:512px) {
+            font-size: 1.5rem;
+            padding: 0.2rem 2.2rem  3rem;
+        }
+        h1{
+            color:#255a8a;
+            font-weight: 600;
+            font-size: 3rem;
+            @media (max-width:512px) {
+                font-size: 2rem;
+
+            }
+            @media (max-width:307px) {
+                font-size: 1.6rem;
+
+            }
+
+        }
+    }
+    .img-overlay{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right:0 ;
+        width: 100%;
+
+    }
+}
+.card-body{
+    height: 400px !important;
+    margin-top: 7rem;
+    @media (max-width:995px) {
+        margin-top: 0rem !important;
+    }
+}

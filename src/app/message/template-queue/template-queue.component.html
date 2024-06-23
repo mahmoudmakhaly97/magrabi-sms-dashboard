@@ -1,0 +1,119 @@
+<app-page-title title="Template Queue" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+<p-toast></p-toast>
+<app-loading-indicator *ngIf="showLoader"></app-loading-indicator>
+
+    <!-- hint message -->
+  <div class="alert alert-primary d-flex align-items-center my-4" role="alert">
+      <i class='bx bx-info-circle me-2'></i>
+      <div>
+       Please Schdule your template twice a day !
+      </div>
+  </div>
+ 
+ <ng-container *ngIf="allTemplateList.length !=0">
+  <div *ngFor="let template of allTemplateList; let i=index" class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div 
+                class="card-header"  >
+              <div class="title" [class.collapsed]="template.userList?.length==0"  
+              data-bs-toggle="collapse" attr.href="#collapseTable-{{template.id}}" 
+                [attr.aria-expanded]="template.userList?.length==0?'false':'true'">
+                <i class='bx bx-chevron-right'></i>
+                  {{template.templateName}}
+                 <span class="badge"
+                    [ngClass]="template.regionID==1?'text-bg-primary':
+                    template.regionID==2?'text-bg-success':
+                    template.regionID==3?'text-bg-warning':
+                    template.regionID==3?'text-bg-danger':''">
+                    {{
+                      template.regionID==1?'Egypt':template.regionID==2?'KSA':
+                      template.regionID==1?'UAE':template.regionID==1?'Qatar':''
+                    }}
+                </span>
+                <span class="badge text-bg-info mx-2">send After:{{template.sendAfter}}</span>
+                <span class="badge text-bg-warning">Send At:{{(template.sendAt).split('T')[0]}}</span>
+              </div>
+              <div class="d-flex align-items-center  ">
+                <!-- <div class="circle me-2 mt-3"></div> -->
+                <button class="btn btn-primary d-flex justify-content-between align-items-center" (click)="schduleTemplate(template.templateID,template.regionID)">
+                  <div class="circle me-2 mt-3"></div>
+                  Schedule Now
+                </button>
+
+                  <!-- <div class="countup" id="countup1">
+                    <button class="btn btn-schedule" (click)="schduleTemplate(template.templateID,template.regionID)">Schedule Now</button>
+                    <span class="timeel minutes" >Send After {{template.sendAfter }}</span>
+                    <span class="timeel timeRefMinutes">
+                      <button class="btn btn-schedule" (click)="schduleTemplate(template.templateID,template.regionID)">Schedule Now</button>
+                    </span>
+                  </div> -->
+              </div>
+          </div>
+          <div [class.show]="template.userList?.length" class="collapse" id="collapseTable-{{template.id}}">
+            <div class="card-body " >
+                <div class="table-responsive">
+                  <table class="table align-middle table-nowrap table-hover dt-responsive nowrap w-100" id="userList-table">
+                    <thead class="table-light">
+                      <tr>
+                        <th scope="col" style="width: 40px;">#</th>
+                        <th scope="col">Medical No.</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Language</th>
+                        <th scope="col">Phone Number</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of template?.userList" class="collapse show" id="collapseTable-1">
+                            <td>
+                                <div class="avatar-xs">
+                                    <span class="avatar-title rounded-circle ">
+                                    {{user.pbptnl.charAt(0)}}
+                                    </span>
+                                </div>
+                            </td>
+                            <td >
+                              <span class="badge text-bg-light"> {{user.abnmbr}}</span>
+                           </td>
+                            <td>{{user.pbptnl}}</td>
+                            <td>{{user.abdate | date }}</td>
+                            <td>{{user.timE24  }}</td>
+                            <td>{{user.lang}}</td>
+                            <td>{{user.pbpttl}}</td>                            
+                        </tr>
+                        <tr *ngIf="template?.userList?.length==0">
+                          <td colspan="7">There's no new User Rrecords</td>
+
+                        </tr>
+
+    
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+        </div>
+        </div>
+    </div> 
+ </div>
+ </ng-container>
+
+ <ng-container *ngIf="allTemplateList.length==0">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+          <div class="card-header"  >
+            <div class="title" >
+              <i class='bx bx-chevron-right'></i>
+                There's no template in queue in your region
+               <span class="badge text-bg-primary">
+                 0 Tempate Active
+              </span>
+            </div>
+        </div>
+      </div>
+    </div>  
+  </div> 
+ </ng-container>
+ 

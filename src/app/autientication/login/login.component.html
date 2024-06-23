@@ -1,0 +1,91 @@
+<p-toast></p-toast>
+<app-loading-indicator *ngIf="showLoader"></app-loading-indicator>
+
+<main class="login-wrapper">
+  <div class="container">
+    <div class="login">
+      
+
+      <div class="top-links">
+        <button type="button" id="theme-toggle" class="theme-toggle"><i class="fi fi-rr-moon-stars"></i></button>
+        <button type="button"><i class="fi fi-rr-globe"></i> AR</button>
+      </div>
+
+      <div class="login-text order-1 order-md-2">
+        <div class="content">
+          <div class="logo"><img src="../../../assets/images/magrabi-logo.png" alt="logo"></div>
+          <h5 class="logo-title"><span>Welcome</span> Magrabi Sms Gateway</h5>
+          <div class="copyright">
+            2024 © Magrabi Hospitals 
+          </div>
+      </div><!--content-->
+      </div><!--login-text-->
+
+      <div class="login-form order-2 order-md-1">
+        <div class="title">
+          <h3>Sign In</h3>
+          <!-- <div class="title-social">
+            <button type="button" class="btn rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Facebook"><i class="icon-facebook"></i></button>
+            <button type="button" class="btn rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Twitter"><i class="icon-twitter"></i></button>
+            <button type="button" class="btn rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Google"><i class="icon-google"></i></button>
+            <button type="button" class="btn rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Face ID"><i class="fi fi-rr-face-viewfinder"></i></button>
+          </div> -->
+        </div><!--title-->
+
+        <form  [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+          <div class="input-group mb-3">
+            <span class="input-group-text"><i class="fi fi-rr-user"></i></span>
+            <div class="form-floating">
+              <input formControlName="username" class="form-control" 
+              [class.is-invalid]="loginForm.get('username')?.hasError  && loginForm.get('username')?.touched " 
+              type="text" class="form-control" id="floatingInputGroup1" placeholder="Username">
+              <label for="floatingInputGroup1">Username</label>
+            </div>
+          </div>
+          <div style="display: block;" *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched"
+            class="invalid-feedback mb-2">  This field is required
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text"><i class="fi fi-rr-lock"></i></span>
+            <div class="form-floating">
+              <input formControlName="password"
+              [class.is-invalid]="loginForm.get('password')?.hasError  && loginForm.get('password')?.touched "
+              type="password" class="form-control" id="floatingInputGroup2" placeholder="Password">
+              <label for="floatingInputGroup2">Password</label>
+            </div>
+          </div>
+          <div  style="display: block;"  *ngIf="loginForm.get('password')?.hasError && loginForm.get('password')?.touched"
+            class="invalid-feedback mb-2">  This field is required
+          </div>
+
+          <button [disabled]="!loginForm.valid" type="submit" class="btn btn-primary mb-3">Sign In</button>
+
+          <div class="row">
+            <!-- <div class="col">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Remember Me
+                </label>
+              </div>                  
+            </div> -->
+            <div class="col text-end">
+              <a routerLink="/account/reset-password">Forgot Password?</a>
+            </div>
+          </div><!--row-->
+
+        </form>
+
+
+      </div><!--col-->
+    </div>
+
+  </div>
+</main>    
+
+
+
+
+

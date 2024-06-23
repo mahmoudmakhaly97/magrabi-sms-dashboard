@@ -1,0 +1,296 @@
+<app-page-title title="Add Branch" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+<p-toast></p-toast>
+<app-loading-indicator *ngIf="showLoader"></app-loading-indicator>
+<form [formGroup]="addBranchForm">
+    <div class="page-title">
+        <h4 class="page-title-text me-auto"></h4>
+        <div class="page-title-end mt-4">
+            <a (click)="reset()" class="btn btn-outline-dark btn-sm ms-1">Cancel</a>
+            <button [disabled]="!addBranchForm.valid" (click)="submit()" class="btn btn-primary btn-sm ms-1">
+                {{editMode==true?'Update Branch':'Create Branch'}}
+            </button>
+        </div>
+    </div>
+
+    <div #targetForm class="content">
+        <div class="card-widget">
+            <div class="container">
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Regions</label>
+                    <div class="col-md-3">
+                        <select class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty"
+                            ng-reflect-model="Buy" formControlName="regionID" [(ngModel)]="selectedregionID"
+                            (change)="onRegionChange()"
+                            [class.is-invalid]="addBranchForm.get('regionID')?.hasError('required') && addBranchForm.get('regionID')?.touched">
+                            <option value="" selected>Select Region</option>
+                            <option value="1">Egypt</option>
+                            <option value="2">KSA</option>
+                            <option value="3">UAE</option>
+                            <option value="4">QATAR</option>
+                        </select>
+                        <div *ngIf="addBranchForm.get('regionID')?.hasError('required') && addBranchForm.get('regionID')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                    <label class="col-md-auto col-form-label">Area</label>
+                    <div class="col-md">
+                        <select class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty"
+                            ng-reflect-model="Buy" formControlName="areaID" [(ngModel)]="selectedAreaID"
+                            (change)="onAreaChange()"
+                            [class.is-invalid]="addBranchForm.get('areaID')?.hasError('required') && addBranchForm.get('areaID')?.touched">
+                            <option value="" selected>Select Area</option>
+                            <option *ngFor="let area of allAreasList" [value]="area.id" class="f-ar">{{area.name}}|
+                                <span class="f-ar">{{area.nameAr}}</span>
+                            </option>
+                        </select>
+                        <div *ngIf="addBranchForm.get('areaID')?.hasError('required') && addBranchForm.get('areaID')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Branch Name</label>
+                    <div class="col-md-3">
+                        <input formControlName="name" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('name')?.hasError('required') && addBranchForm.get('name')?.touched">
+                        <div *ngIf="addBranchForm.get('name')?.hasError('required') && addBranchForm.get('name')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                    <label class="col-md-auto col-form-label">Branch Arabic Name</label>
+                    <div class="col-md">
+                        <input formControlName="nameAr" class="form-control f-ar" type="text"
+                            [class.is-invalid]="addBranchForm.get('nameAr')?.hasError('required') && addBranchForm.get('nameAr')?.touched">
+                        <div *ngIf="addBranchForm.get('nameAr')?.hasError('required') && addBranchForm.get('nameAr')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Branch Code</label>
+                    <div class="col-md-9">
+                        <input formControlName="branchCode" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('branchCode')?.hasError('required') && addBranchForm.get('branchCode')?.touched">
+                        <div *ngIf="addBranchForm.get('branchCode')?.hasError('required') && addBranchForm.get('branchCode')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Geo Location</label>
+                    <div class="col-md-9">
+                        <input formControlName="geoLocation" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('geoLocation')?.hasError('required') && addBranchForm.get('geoLocation')?.touched">
+                        <div *ngIf="addBranchForm.get('geoLocation')?.hasError('required') && addBranchForm.get('geoLocation')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Google Review Link</label>
+                    <div class="col-md-9">
+                        <input formControlName="googleReviewLink" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('googleReviewLink')?.hasError('required') && addBranchForm.get('googleReviewLink')?.touched">
+                        <div *ngIf="addBranchForm.get('googleReviewLink')?.hasError('required') && addBranchForm.get('googleReviewLink')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Admin Emails</label>
+                    <div class="col-md-9">
+                        <textarea rows="3" formControlName="emailsAdmin" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('emailsAdmin')?.hasError('required') && addBranchForm.get('emailsAdmin')?.touched"></textarea>
+                        <div *ngIf="addBranchForm.get('emailsAdmin')?.hasError('required') && addBranchForm.get('emailsAdmin')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Admin PhoneNumbers</label>
+                    <div class="col-md-9">
+                        <textarea rows="3" formControlName="mobilesAdmin" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('mobilesAdmin')?.hasError('required') && addBranchForm.get('mobilesAdmin')?.touched"></textarea>
+                        <div *ngIf="addBranchForm.get('mobilesAdmin')?.hasError('required') && addBranchForm.get('mobilesAdmin')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Server Name</label>
+                    <div class="col-md-9">
+                        <input formControlName="serverName" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('serverName')?.hasError('required') && addBranchForm.get('serverName')?.touched">
+                        <div *ngIf="addBranchForm.get('serverName')?.hasError('required') && addBranchForm.get('serverName')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Port Number</label>
+                    <div class="col-md-9">
+                        <input formControlName="portNumber" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('portNumber')?.hasError('required') && addBranchForm.get('portNumber')?.touched">
+                        <div *ngIf="addBranchForm.get('portNumber')?.hasError('required') && addBranchForm.get('portNumber')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Ip Address</label>
+                    <div class="col-md-9">
+                        <input formControlName="ipAddress" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('ipAddress')?.hasError('required') && addBranchForm.get('ipAddress')?.touched">
+                        <div *ngIf="addBranchForm.get('ipAddress')?.hasError('required') && addBranchForm.get('ipAddress')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">User Name</label>
+                    <div class="col-md-9">
+                        <input formControlName="userName" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('userName')?.hasError('required') && addBranchForm.get('userName')?.touched">
+                        <div *ngIf="addBranchForm.get('userName')?.hasError('required') && addBranchForm.get('userName')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Password</label>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <input formControlName="password" class="form-control"
+                                [type]="passwordVisible ? 'text' : 'password'"
+                                [class.is-invalid]="addBranchForm.get('password')?.hasError('required') && addBranchForm.get('password')?.touched">
+                            <button class="btn btn-outline-secondary" type="button"
+                                (click)="togglePasswordVisibility()">
+                                {{ passwordVisible ? 'Hide' : 'Show' }}
+                            </button>
+                        </div>
+                        <div *ngIf="addBranchForm.get('password')?.hasError('required') && addBranchForm.get('password')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Service Provider's Access Token</label>
+                    <div class="col-md-9">
+                        <input formControlName="serviceProviderAccessToken" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('serviceProviderAccessToken')?.hasError('required') && addBranchForm.get('serviceProviderAccessToken')?.touched">
+                        <div *ngIf="addBranchForm.get('serviceProviderAccessToken')?.hasError('required') && addBranchForm.get('serviceProviderAccessToken')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Api Link</label>
+                    <div class="col-md-9">
+                        <input formControlName="apiLink" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('apiLink')?.hasError('required') && addBranchForm.get('apiLink')?.touched">
+                        <div *ngIf="addBranchForm.get('apiLink')?.hasError('required') && addBranchForm.get('apiLink')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+            </div><!--container-sm-->
+
+        </div><!--card-widget-->
+    </div><!--content-->
+</form>
+
+
+<div class="content mt-5">
+    <div class="card-widget">
+        <div class="page-title">
+            <h4 class="page-title-text me-auto">Branches List</h4>
+        </div>
+
+        <div class="table-search ms-auto">
+            <i class="fi fi-rr-search"></i>
+            <input type="text" class="form-control form-control-sm" placeholder="Search..">
+        </div>
+
+        <div class="table-responsive">
+            <p-table [value]="allBranchList" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+                [tableStyle]="{ 'min-width': '50rem' }"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [rowsPerPageOptions]="[5, 10, 20]" class="table table-striped">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width:15%">Name</th>
+                        <th style="width:15%">Arabic Name</th>
+                        <th style="width:20%">Region</th>
+                        <th style="width:15%">Branch Code</th>
+                        <th style="width:15%">GeoLocation</th>
+                        <th style="width:15%">GoogleReviewLink</th>
+                        <th style="width:15%">emailsAdmin</th>
+                        <th style="width:15%">mobilesAdmin</th>
+                        <th style="width:15%">option</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-branch>
+                    <tr>
+                        <td>{{ branch.name }}</td>
+                        <td class="f-ar">{{ branch.nameAr }}</td>
+                        <td>
+                            <img class="flag-icon" [src]="branch.regionID==(1)?'../../../assets/images/flags/egypt.png':
+                        (branch.regionID)==(2)?'../../../assets/images/flags/ksa.png':
+                        (branch.regionID)==(4)?'../../../assets/images/flags/qatar.jpg':
+                        (branch.regionID)==(3)?'../../../assets/images/flags/uae.png':''">
+                            {{branch.regionID==1?'Egypt':
+                            branch.regionID==2?'KSA':
+                            branch.regionID==3?'UAE':'Qatar'}}
+                        </td>
+                        <td>{{ branch.branchCode }}</td>
+                        <td>
+                            <a [href]="branch.geoLocation" target="_blank">{{ branch.geoLocation }}</a>
+                        </td>
+                        <td>
+                            <a [href]="branch.googleReviewLink" target="_blank">{{ branch.googleReviewLink }}</a>
+                        </td>
+                        <td>
+                            <div *ngIf="branch.emailsAdmin">
+                                <div *ngFor="let email of branch.emailsAdmin.split(',')">
+                                    {{ email }}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div *ngIf="branch.emailsAdmin">
+                                <div *ngFor="let number of branch.mobilesAdmin.split(',')">
+                                    {{ number }}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button (click)="editBranch(branch)" class="btn btn-warning btn-sm">Edit</button>
+                        </td>
+
+
+                    </tr>
+                </ng-template>
+                <tr>
+                    <td colspan="6">
+                        <div class="error-s">
+                            <i><img src="../../../../assets/images/empty-page.svg" alt="" /></i>
+                            <h1><span>No</span> Data Found <span>!</span></h1>
+                        </div>
+                    </td>
+                </tr>
+
+            </p-table>
+        </div>
+    </div>
+</div>

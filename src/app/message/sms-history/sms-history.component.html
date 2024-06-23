@@ -1,0 +1,236 @@
+<app-page-title title="Sms History " [breadcrumbItems]="breadCrumbItems"></app-page-title>
+<p-toast></p-toast>
+<app-loading-indicator *ngIf="showLoader"></app-loading-indicator>
+
+    <!-- hint message -->
+    <div class="alert alert-primary d-flex align-items-center my-4" role="alert">
+        <i class='bx bx-info-circle me-2'></i>
+        <div>
+             <b>    
+                 Please Select Area , Branch and Template Name.
+            </b>
+        </div>
+    </div>
+    <div *ngIf="noHistory" class="alert alert-danger d-flex align-items-center" role="alert">
+        <i class='bx bx-error me-2' ></i>        
+        <div>
+         There's no History in this Branch please,select another one !
+        </div>
+    </div>
+<form  [formGroup]="historyFilterForm">
+    <div class="page-title">
+    <h4 class="page-title-text me-auto"></h4>
+    <div class="page-title-end mt-4">
+        <a (click)="reset()" class="btn btn-outline-dark btn-sm ms-1">Cancel</a>
+        <button [disabled]="!historyFilterForm.valid " (click)="submit()" class="btn btn-primary btn-sm ms-1">
+           Filter
+        </button>
+    </div>
+    </div>
+
+    <div  class="content">
+    <div class="card-widget">
+        <div class="container">
+                <div class="row mb-3">
+                    <label class="col-md-auto col-form-label">Regions</label>
+                    <div class="col-md">
+                        <select
+                            class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy"
+                            formControlName="regionID"
+                            [(ngModel)]="selectedregionID" 
+                            (change)="onRegionChange()" 
+                            [class.is-invalid]="historyFilterForm.get('regionID')?.hasError('required') && historyFilterForm.get('regionID')?.touched"
+                            >
+                            <option value="" selected >Select Region</option>
+                            <option value="1" >Egypt</option>
+                            <option value="2" >KSA</option>
+                            <option value="3" >UAE</option>
+                            <option value="4" >QATAR</option>
+                        </select>
+                        <div *ngIf="historyFilterForm.get('regionID')?.hasError('required') && historyFilterForm.get('regionID')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                    <label class="col-md-auto col-form-label">Area</label>
+                    <div class="col-md">
+                        <select
+                            class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy"
+                            formControlName="areaID"
+                            [(ngModel)]="selectedAreaID" 
+                            (change)="onAreaChange()" 
+                            [class.is-invalid]="historyFilterForm.get('areaID')?.hasError('required') && historyFilterForm.get('areaID')?.touched"
+                            >
+                            <option value="" selected >Select Area</option>
+                            <option *ngFor="let area of allAreaList" [value]="area.id"  class="f-ar" >{{area.name}}| <span class="f-ar">{{area.nameAr}}</span></option>
+                        </select>
+                        <div *ngIf="historyFilterForm.get('areaID')?.hasError('required') && historyFilterForm.get('areaID')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                    <label class="col-md-auto col-form-label">Branch</label>
+                    <div class="col-md">
+                        <select
+                            class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy"
+                            formControlName="branchID"
+                            [(ngModel)]="selectedBranchID" 
+                            (change)="onBranchChange()" 
+                            [class.is-invalid]="historyFilterForm.get('branchID')?.hasError('required') && historyFilterForm.get('branchID')?.touched"
+                            >
+                            <option value="" selected >Select Branch</option>
+                            <option *ngFor="let branch of allBranchList" [value]="branch.id"  class="f-ar" >{{branch.name}}| <span class="f-ar">{{branch.nameAr}}</span></option>
+                        </select>
+                        <div *ngIf="historyFilterForm.get('branchID')?.hasError('required') && historyFilterForm.get('branchID')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Status</label>
+                    <div class="col-md">
+                        <p-multiSelect 
+                            [options]="statuses" [(ngModel)]="selectedStatus" 
+                            optionLabel="name" placeholder="select status"  
+                            formControlName="statusCode"
+                            >
+                        </p-multiSelect>
+                        <div *ngIf="historyFilterForm.get('statusCode')?.hasError('required') && historyFilterForm.get('statusCode')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Template View</label>
+                    <div class="col-md">
+                        <p-multiSelect 
+                        [options]="templateDetailList" 
+                        [(ngModel)]="selectedTemplate" optionLabel="templateName" 
+                        placeholder="select template"
+                        formControlName="templateId"
+                        [class.is-invalid]="historyFilterForm.get('templateId')?.hasError('required') && historyFilterForm.get('templateId')?.touched"
+                        >
+                        </p-multiSelect>
+                        <div *ngIf="historyFilterForm.get('templateId')?.hasError('required') && historyFilterForm.get('templateId')?.touched"
+                        class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">From</label>
+                    <div class="col-md-9">
+                        <input class="form-control" type="date" value="2019-08-19" id="example-date-input"
+                        formControlName="dtFrom" [class.is-invalid]="historyFilterForm.get('dtFrom')?.hasError('required') && historyFilterForm.get('dtFrom')?.touched" >
+                        <div *ngIf="historyFilterForm.get('dtFrom')?.hasError('required') && historyFilterForm.get('dtFrom')?.touched"
+                        class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">To Date</label>
+                    <div class="col-md-9">
+                        <input formControlName="dtTo" class="form-control" type="date" value="2019-08-19" 
+                        [class.is-invalid]="historyFilterForm.get('dtTo')?.hasError('required') && historyFilterForm.get('dtTo')?.touched" >
+                        <div *ngIf="historyFilterForm.get('dtTo')?.hasError('required') && historyFilterForm.get('dtTo')?.touched"
+                        class="invalid-feedback">Field is required
+                    </div>
+                    </div>
+                </div>
+
+        </div><!--container-sm-->
+
+    </div><!--card-widget-->
+    </div><!--content-->
+</form>
+
+
+
+  <div class="content mt-5">
+    <div class="card-widget">
+          <div class="page-title">
+            <h4 class="page-title-text me-auto">Filter Result</h4>
+            <div class="page-title-end">
+              <!-- <input type="date" class="form-control form-control-sm"> -->
+              <button (click)="exportToPdf()" class="btn btn-primary btn-sm ms-1 d-flex align-items-center"><i class="fi fi-rr-file-pdf mx-2"></i>Export PDF</button>
+            </div>
+          </div>
+
+         <div >
+            <div class="d-flex justify-content-center align-items-center mb-4">
+                <div class="me-4">
+                    <h5 class="me-2">Total Cost</h5>
+                    <span class="badge  text-bg-info text-center">{{ totalCost}}</span>
+                </div>
+                <div>
+                    <h5  class="me-2">Total Count</h5>
+                    <span class="badge  text-bg-info">{{ totalCount}}</span>
+                </div>
+            </div>
+         </div> 
+
+      <div #table class="table-responsive">
+        <p-table
+        [value]="filterResult"
+        [paginator]="true"
+        [rows]="rows"
+        [(first)]="first"
+        [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        class="table table-striped"
+        (onPage)="onPageChange($event)"
+        (onLazyLoad)="onDataLoadComplete()"
+        >
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width:10%">statusCode</th>
+                <th style="width:15%">Cost</th>
+                <th style="width:15%">totalCount</th>
+                <th style="width:15%">msgLength</th>
+                <th style="width:15%">template Name</th>
+                <th style="width:30%">Delivered</th>
+                <th style="width:40%">UnDelivered</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-result>
+            <tr     >
+                <td>
+                    <span *ngIf="result.statusCode=='400' || result.statusCode=='403' " class="badge rounded-pill text-bg-danger">Failed</span>
+                    <span *ngIf="result.statusCode=='201'" class="badge rounded-pill text-bg-success">Sucess</span>
+                </td>
+                <td >{{ result.cost }} | {{ result.currency }}</td>
+                <td>{{ result.totalCount }}</td>
+                <td>{{ result.msgLength }}</td>
+                <td>{{ result.templateName}}</td>
+                <td>
+                    <div *ngIf="result.rejected">
+                        <div *ngFor="let number of result.rejected.split(',')">
+                          {{ number }}
+                        </div>
+                    </div>                  
+                </td>
+                <td>
+                    <div *ngIf="result.accepted">
+                        <div *ngFor="let number of result.accepted.split(',')">
+                          {{ number }}
+                        </div>
+                    </div>                  
+                </td>
+            </tr>
+        </ng-template>
+        <tr >
+            <td colspan="6">
+            <div class="error-s">
+              <i><img src="../../../../assets/images/empty-page.svg" alt=""/></i>
+              <h1><span>No</span> Data Found <span>!</span></h1>
+            </div>
+            </td>
+        </tr>
+    
+        </p-table>
+
+      </div> 
+    </div>
+  </div>
+
+
+

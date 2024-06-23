@@ -1,0 +1,33 @@
+// @import '../../../assets/scss/_variables';
+
+.edit-btn{
+    padding: 5px 20px;
+    border-radius: 0px;
+    border-bottom-left-radius: 6px;
+    background-color: #332877;
+    border-color:#332877 ;
+}
+.tab-pane{
+    i{font-size: 1.5rem;cursor: pointer;}
+}
+.nav{
+    .nav-item{
+        .active{    
+            background-color: #332877;
+            color: #fff;}
+       button{  i{font-size: 1.5rem;cursor: pointer; padding-right: 0.5rem;}}
+    }
+}
+.rounded-circle {
+    border-radius: 50%!important;
+    background-color: #0055b8;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    padding: 6px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
