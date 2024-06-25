@@ -169,19 +169,18 @@ export class BranchesComponent implements OnInit {
 
 submit() {
   this.showLoader = true;
-  let showToast = false; // Initialize showToast flag
+  let showToast = false;
 
   if (this.editMode) {
-    // Update existing branch
     this.store.dispatch(new EditBranchAction(this.addBranchForm.value)).subscribe(
       (response) => {
         if (response) {
-          showToast = true; // Set showToast to true after successful update
+          showToast = true; 
           this.showLoader = false;
           this.reset();
-          this.getAllBranchesList(); // Refresh active branches list
-          this.subscribeToBranchesList(); // Subscribe to changes
-          this.editMode = false; // Reset editMode to false
+          this.getAllBranchesList();
+          this.subscribeToBranchesList(); 
+          this.editMode = false; 
         }
       },
       (error) => {
@@ -189,13 +188,12 @@ submit() {
       }
     );
   } else {
-    // Add new branch (deactivated branch)
+
     this.http.get<any[]>('http://service.themagsmen.com/api/DeactiveBranches').subscribe(
       (deactivatedBranches: any[]) => {
         if (deactivatedBranches && deactivatedBranches.length > 0) {
-          const firstBranch = deactivatedBranches[0]; // Get the first deactivated branch
+          const firstBranch = deactivatedBranches[0]; 
           
-          // Patch form values with deactivated branch details
           this.addBranchForm.patchValue({
             regionID: firstBranch.regionID,
             areaID: firstBranch.areaID,
@@ -221,13 +219,13 @@ submit() {
             dbName: firstBranch.dbName
           });
 
-          // Now dispatch action to add new branch
+
           this.store.dispatch(new AddNewBranchAction(this.addBranchForm.value)).subscribe(
             (response) => {
               if (response) {
                 this.showLoader = false;
-                this.getAllBranchesList(); // Refresh active branches list
-                this.editMode = true; // Set editMode back to true for next edit
+                this.getAllBranchesList(); 
+                this.editMode = true; 
               }
             },
             (error) => {
@@ -236,7 +234,6 @@ submit() {
             }
           );
         } else {
-          // Handle case where no deactivated branches are found
           this.showLoader = false;
           console.log('No deactivated branches found.');
         }
@@ -248,13 +245,13 @@ submit() {
     );
   }
 
-  // Show toast conditionally based on showToast flag
+
   setTimeout(() => {
     if (showToast) {
-      // Display your toast message here
+
       console.log('Toast shown after update');
     }
-  }, 0); // Use setTimeout to ensure it runs after other operations
+  }, 0);
 }
 // submit() {
 //   this.showLoader = true;
