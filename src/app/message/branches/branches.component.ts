@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { createBranch } from '../models/branch.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -9,13 +9,14 @@ import { branchState } from '../state/branches/branches.state';
 import { AddNewBranchAction, EditBranchAction, GetAllAreasAction, GetAllBranchesAction } from '../state/branches/branches.action';
 import { AuthLogin } from 'src/app/autientication/models/auth.model';
 import { AuthState } from 'src/app/autientication/state/auth.state';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-branches',
   templateUrl: './branches.component.html',
   styleUrls: ['./branches.component.scss']
 })
-export class BranchesComponent {
+export class BranchesComponent implements OnInit {
   @ViewChild('targetForm') targetForm: ElementRef;
 
   breadCrumbItems: Array<{}>;
@@ -29,7 +30,7 @@ export class BranchesComponent {
   allAreasList: any = [];
   editMode: boolean = false;
   userRole: string = '';
-
+ deactivatedBranches: any[] = []; 
   @Select(branchState.getbranches)
   getAllBranches$!: Observable<any>;
 
@@ -41,7 +42,28 @@ export class BranchesComponent {
 
 
 
-  constructor(private formBuilder: FormBuilder, private store: Store) { }
+ constructor(private http: HttpClient, private fb: FormBuilder,private formBuilder: FormBuilder, private store: Store) {
+    this.addBranchForm = this.fb.group({
+      regionID: ['', Validators.required],
+      areaID: ['', Validators.required],
+      name: ['', Validators.required],
+      nameAr: ['', Validators.required],
+      branchCode: ['', Validators.required],
+      geoLocation: ['', Validators.required],
+      googleReviewLink: ['', Validators.required],
+      emailsAdmin: ['', Validators.required],
+      mobilesAdmin: ['', Validators.required],
+      sender: ['', Validators.required],
+      portNum: ['', Validators.required],
+      serverIP: ['', Validators.required],
+      serverName: ['', Validators.required],
+      uName: ['', Validators.required],
+      pWord: ['', Validators.required],
+      serviceProviderAccessToken: ['', Validators.required],
+      spapiLink: ['', Validators.required],
+      dbName: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: 'Branches' }, { label: 'Add New Branch', active: true }];
@@ -145,42 +167,184 @@ export class BranchesComponent {
     this.addBranchForm.patchValue({ areaID: this.selectedAreaID })
   }
 
-  submit() {
-    this.showLoader = true;
-    if (this.editMode) {
-      this.store.dispatch(new EditBranchAction(this.addBranchForm.value)).subscribe(
-        (response) => {
-          if (response) {
-            this.showLoader = false;
-            this.reset();
-            this.getAllBranchesList()
-            this.subscribeToBranchesList();
-          }
-        },
-        (error) => {
-          this.showLoader = false;
-        }
-      );
-    }
-    else {
-      this.store.dispatch(new AddNewBranchAction(this.addBranchForm.value)).subscribe(
-        (response) => {
-          if (response) {
-            this.showLoader = false;
-            this.reset();
-            this.getAllBranchesList()
-            this.subscribeToBranchesList();
-          }
-        },
-        (error) => {
-          this.showLoader = false;
-        }
-      );
-    }
-    console.log(this.addBranchForm.value);
+submit() {
+  this.showLoader = true;
+  let showToast = false; // Initialize showToast flag
 
+  if (this.editMode) {
+    // Update existing branch
+    this.store.dispatch(new EditBranchAction(this.addBranchForm.value)).subscribe(
+      (response) => {
+        if (response) {
+          showToast = true; // Set showToast to true after successful update
+          this.showLoader = false;
+          this.reset();
+          this.getAllBranchesList(); // Refresh active branches list
+          this.subscribeToBranchesList(); // Subscribe to changes
+          this.editMode = false; // Reset editMode to false
+        }
+      },
+      (error) => {
+        this.showLoader = false;
+      }
+    );
+  } else {
+    // Add new branch (deactivated branch)
+    this.http.get<any[]>('http://service.themagsmen.com/api/DeactiveBranches').subscribe(
+      (deactivatedBranches: any[]) => {
+        if (deactivatedBranches && deactivatedBranches.length > 0) {
+          const firstBranch = deactivatedBranches[0]; // Get the first deactivated branch
+          
+          // Patch form values with deactivated branch details
+          this.addBranchForm.patchValue({
+            regionID: firstBranch.regionID,
+            areaID: firstBranch.areaID,
+            bearerT: firstBranch.bearerT,
+            id: firstBranch.id,
+            apiLink: firstBranch.apiLink,
+            ipAddress: firstBranch.ipAddress,
+            name: firstBranch.name,
+            nameAr: firstBranch.nameAr,
+            branchCode: firstBranch.branchCode,
+            geoLocation: firstBranch.geoLocation,
+            googleReviewLink: firstBranch.googleReviewLink,
+            emailsAdmin: firstBranch.emailsAdmin,
+            mobilesAdmin: firstBranch.mobilesAdmin,
+            sender: firstBranch.sender,
+            portNum: firstBranch.portNum,
+            serverIP: firstBranch.serverIP,
+            serverName: firstBranch.serverName,
+            uName: firstBranch.uName,
+            pWord: firstBranch.pWord,
+            serviceProviderAccessToken: firstBranch.serviceProviderAccessToken,
+            spapiLink: firstBranch.spapiLink,
+            dbName: firstBranch.dbName
+          });
 
+          // Now dispatch action to add new branch
+          this.store.dispatch(new AddNewBranchAction(this.addBranchForm.value)).subscribe(
+            (response) => {
+              if (response) {
+                this.showLoader = false;
+                this.getAllBranchesList(); // Refresh active branches list
+                this.editMode = true; // Set editMode back to true for next edit
+              }
+            },
+            (error) => {
+              this.showLoader = false;
+              console.error('Error adding new branch:', error);
+            }
+          );
+        } else {
+          // Handle case where no deactivated branches are found
+          this.showLoader = false;
+          console.log('No deactivated branches found.');
+        }
+      },
+      (error) => {
+        this.showLoader = false;
+        console.error('Error fetching deactivated branches:', error);
+      }
+    );
   }
+
+  // Show toast conditionally based on showToast flag
+  setTimeout(() => {
+    if (showToast) {
+      // Display your toast message here
+      console.log('Toast shown after update');
+    }
+  }, 0); // Use setTimeout to ensure it runs after other operations
+}
+// submit() {
+//   this.showLoader = true;
+//   let showToast = false; // Initialize showToast flag
+
+//   if (this.editMode) {
+//     // Update existing branch
+//     this.store.dispatch(new EditBranchAction(this.addBranchForm.value)).subscribe(
+//       (response) => {
+//         if (response) {
+//           showToast = true; // Set showToast to true after successful update
+//           this.showLoader = false;
+//           this.reset();
+//           this.getAllBranchesList(); // Refresh active branches list
+//           this.subscribeToBranchesList(); // Subscribe to changes
+//           this.editMode = false; // Reset editMode to false
+//         }
+//       },
+//       (error) => {
+//         this.showLoader = false;
+//       }
+//     );
+//   } else {
+//     // Add new branch (deactivated branch)
+//     this.http.get<any[]>('http://service.themagsmen.com/api/DeactiveBranches').subscribe(
+//       (deactivatedBranches: any[]) => {
+//         if (deactivatedBranches && deactivatedBranches.length > 0) {
+//           const firstBranch = deactivatedBranches[0]; // Get the first deactivated branch
+          
+//           // Patch form values with deactivated branch details
+//           this.addBranchForm.patchValue({
+//             regionID: firstBranch.regionID,
+//             areaID: firstBranch.areaID,
+//             bearerT: firstBranch.bearerT,
+//             id: firstBranch.id,
+//             apiLink: firstBranch.apiLink,
+//             ipAddress: firstBranch.ipAddress,
+//             name: firstBranch.name,
+//             nameAr: firstBranch.nameAr,
+//             branchCode: firstBranch.branchCode,
+//             geoLocation: firstBranch.geoLocation,
+//             googleReviewLink: firstBranch.googleReviewLink,
+//             emailsAdmin: firstBranch.emailsAdmin,
+//             mobilesAdmin: firstBranch.mobilesAdmin,
+//             sender: firstBranch.sender,
+//             portNum: firstBranch.portNum,
+//             serverIP: firstBranch.serverIP,
+//             serverName: firstBranch.serverName,
+//             uName: firstBranch.uName,
+//             pWord: firstBranch.pWord,
+//             serviceProviderAccessToken: firstBranch.serviceProviderAccessToken,
+//             spapiLink: firstBranch.spapiLink,
+//             dbName: firstBranch.dbName
+//           });
+
+//           // Now dispatch action to add new branch
+//           this.store.dispatch(new AddNewBranchAction(this.addBranchForm.value)).subscribe(
+//             (response) => {
+//               if (response) {
+//                 this.showLoader = false;
+//                 this.getAllBranchesList(); // Refresh active branches list
+//                 this.editMode = true; // Set editMode back to true for next edit
+//               }
+//             },
+//             (error) => {
+//               this.showLoader = false;
+//               console.error('Error adding new branch:', error);
+//             }
+//           );
+//         } else {
+//           // Handle case where no deactivated branches are found
+//           this.showLoader = false;
+//           console.log('No deactivated branches found.');
+//         }
+//       },
+//       (error) => {
+//         this.showLoader = false;
+//         console.error('Error fetching deactivated branches:', error);
+//       }
+//     );
+//   }
+
+//   // Show toast conditionally based on showToast flag
+//   setTimeout(() => {
+//     if (showToast) {
+//       // Display your toast message here
+//       console.log('Toast shown after update');
+//     }
+//   }, 0); // Use setTimeout to ensure it runs after other operations
+// }
 
   subscribeToBranchesList() {
     this.getAllBranches$.subscribe((response: any) => {

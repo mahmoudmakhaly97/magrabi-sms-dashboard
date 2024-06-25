@@ -13,11 +13,13 @@ export class BranchesService {
   constructor(private http: HttpClient,private toastr: MessageService)  { }
 
   addBranch(branch:createBranch): Observable<any> {
-    const url = `${this.baseUrl}/api/CreateBranch`;
-    return this.http.post(url,branch)
+    const url = `${this.baseUrl}/api/DeactiveBranches`;
+    return this.http.get(url)
       .pipe(
         catchError(this.handleError)
       );
+
+      
   }
   getAllBranches(): Observable<any> {
     const url = `${this.baseUrl}/api/GetAllBranches`;
