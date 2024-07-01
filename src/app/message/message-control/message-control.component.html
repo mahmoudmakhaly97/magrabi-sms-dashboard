@@ -58,7 +58,10 @@
                 <i class='bx bxs-edit-alt'></i>
                 Edit
             </button>
-            <button [disabled]="!templateConfigurationForm.valid || isAllInputsDisabled() " (click)="submit()" 
+            <button 
+            
+            
+            (click)="submit()" 
                     type="submit" class="btn btn-primary w-xl btn-sm ms-1">Save Template Configuration</button>
         </div>
         <div class="content my-4">
@@ -67,35 +70,72 @@
                     <div class="d-flex justify-content-end align-items-center">
                     </div>
                     <div class="row mb-2">
-                        <div class="col-xl-4 col-sm-6">
-                            <div class="mb-3">
-                                <label class="col-form-label" >Send at :</label>
-                                <input formControlName="sendAt" class="form-control" type="date" [value]="getTodayDate" [min]="getTodayDate" id="example-date-input">
+                        <div class="col-xl-2 col-sm-6 align-self-center">
+                            <div class="d-flex gap-3 align-items-center">
+                                <label  class="col-form-label" >Is Reminder :</label> 
+                                <input formControlName="isReminder"
+                                onchange="if(this.checked){
+                                    document.getElementById('sendAfter').style.display='none';
+                                    document.getElementById('sendAfterReminder').style.display='block';
+
+                                }else{      document.getElementById('sendAfter').style.display='block';
+                                    document.getElementById('sendAfterReminder').style.display='none';
+                                    }"
+       [checked]="templateConfigurationForm?.get('isReminder')?.value"
+   
+       class="isReminderInput form-check-input"
+       type="checkbox">
+
                                 <!--container-->
                             </div>
-                            <p *ngIf="templateConfigurationForm?.get('sendAt')?.invalid && templateConfigurationForm?.get('sendAt')?.touched"
-                                class="text-danger"  role="alert">
-                                Send At is required.
-                            </p>
+                       <p *ngIf="templateConfigurationForm?.get('isReminder')?.invalid && templateConfigurationForm?.get('isReminder')?.touched"
+               class="text-danger" role="alert">
+                Is Reminder is required.
+            </p>
         
                         </div>
-                        <div class="col-xl col-sm-6">
+                        <div class="col-xl-2 col-sm-6" id="sendAfter">
                             <div class="mb-3">
                                 <label class="col-form-label" >Send after :</label>
                                 <!-- <input class="form-control" type="time" value="13:45:00" id="example-time-input" min='01' max='02'> -->
-                                <select formControlName="sendAfter" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Bitcoin">
-                                    <option value="" selected="" >send After</option>
-                                    <option value="10" selected="" >10 Min</option>
-                                    <option value="15" selected="" >15 Min</option>
-                                    <option value="30" >30 Min	</option>
+                                  <select formControlName="sendAfter" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                    <option value="" selected>Send After</option>
+                    <option value="10">10 Min</option>
+                    <option value="15">15 Min</option>
+                    <option value="30">30 Min</option>
+                </select>
+                                <!--container-->
+                            </div>
+                                <p *ngIf="templateConfigurationForm?.get('sendAfter')?.invalid && templateConfigurationForm?.get('sendAfter')?.touched"
+               class="text-danger" role="alert">
+                Send After is required.
+            </p>
+                        </div>
+                         
+
+  <div class="col-xl-2 col-sm-6" id="sendAfterReminder">
+                            <div class="mb-3">
+                                <label class="col-form-label" >Send after Reminder :</label>
+                                <!-- <input class="form-control" type="time" value="13:45:00" id="example-time-input" min='01' max='02'> -->
+                                <select formControlName="sendAfterReminder" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Bitcoin">
+                                    <option value="" selected >send After Reminder</option>
+                                    <option  value="1"
+                                     >1 Month </option>
+                                    <option value="2" >2  Months</option>
+                                    <option value="3" >3 Months</option>
                                 </select>
                                 <!--container-->
                             </div>
-                            <p *ngIf="templateConfigurationForm?.get('sendAfter')?.invalid && templateConfigurationForm?.get('sendAfter')?.touched"
+                            <p *ngIf="templateConfigurationForm?.get('sendAfterReminder')?.invalid && templateConfigurationForm?.get('sendAfterReminder')?.touched"
                                 class="text-danger"  role="alert">
-                                Send After is required.
+                                Send After Reminder  is required.
                             </p>
                         </div>
+
+
+
+
+
                         <div  class="col-xl col-sm-6">
                             <div  class="mb-3">
                                 <label class="col-form-label">Gender</label>

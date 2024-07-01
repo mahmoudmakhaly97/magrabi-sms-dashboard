@@ -42,11 +42,13 @@ export class MessageControlComponent implements OnInit{
   role$!: Observable<AuthLogin>;
 
 
-  constructor(private formBuilder: FormBuilder,
+ constructor(
+    private formBuilder: FormBuilder,
     private toaster: MessageService,
-              private store:Store){
+    private store: Store
+  ) {}
 
-  }
+ 
   ngOnInit(): void {
     this.createConfigTemplate();
     this.subscribeToTemplateState();
@@ -55,62 +57,66 @@ export class MessageControlComponent implements OnInit{
 
     this.breadCrumbItems = [{ label: 'Message' }, { label: 'Message Configuration', active: true }];
 
-
     this.englishDynamicContent = this.englishDynamicContent
-    .replace('{{Name}}', 'Mohamed Ibrahim')
-    .replace('{{date}}', '29 Feb 2024')
-    .replace('{{time}}', '3pm');
+      .replace('{{Name}}', 'Mohamed Ibrahim')
+      .replace('{{date}}', '29 Feb 2024')
+      .replace('{{time}}', '3pm');
     this.arabicdDynamicContent = this.arabicdDynamicContent
-    .replace('{{Name}}', 'محمد ابراهيم')
-    .replace('{{date}}', '29 Feb 2024')
-    .replace('{{time}}', '3pm');
+      .replace('{{Name}}', 'محمد ابراهيم')
+      .replace('{{date}}', '29 Feb 2024')
+      .replace('{{time}}', '3pm');
+        document.getElementById('sendAfter')!.style.display = 'none';
 
-  }
+  }  
 
-
-  submit(){
-    this.showLoader=true;
+    onIsReminderChange(isChecked: boolean) {
+      if (isChecked) {
+        this.templateConfigurationForm.get('isReminder')!.setValue(true);
+      } else {
+        this.templateConfigurationForm.get('isReminder')!.setValue(false);
+      }
+    }
+ 
+  submit() {
+    this.showLoader = true;
     this.store.dispatch(new EditTemplateAction(this.templateConfigurationForm.value))
       .subscribe(
-      (response) => {
-        if (response) {
-          this.disableAllInputs();
+        (response) => {
+          if (response) {
+            this.disableAllInputs();
+            this.showLoader = false;
+          }
+        },
+        (error) => {
           this.showLoader = false;
         }
-      },
-      (error) => {
-        this.showLoader = false;
-      }
-      
-      
-      )
-
-      
-
+      );
   }
 
 
-  toggleEditconfig(status:boolean){
+
+  toggleEditconfig(status: boolean) {
     const formControls = this.templateConfigurationForm.controls;
-    if(status && !this.isSelectDisabled){
+    if (status && !this.isSelectDisabled) {
       Object.keys(formControls).forEach(controlName => {
         formControls[controlName].enable();
       });
-    }
-    else{
+ 
+ 
+    } else {
       this.toaster.add({ severity: 'error', summary: 'Error', detail: "You should Select Region and Template First !" });
       this.disableAllInputs();
     }
   }
 
-  disableAllInputs(){
+   disableAllInputs() {
     const formControls = this.templateConfigurationForm.controls;
     Object.keys(formControls).forEach(controlName => {
       formControls[controlName].disable();
     });
   }
 
-  isAllInputsDisabled(): boolean {
+   isAllInputsDisabled(): boolean {
     const formControls = this.templateConfigurationForm.controls;
     for (const controlName in formControls) {
       if (controlName !== 'run' && formControls[controlName].enabled) {
@@ -121,42 +127,47 @@ export class MessageControlComponent implements OnInit{
   }
 
   //select template
+
   onTemplateChange() {
-    const filtered=this.templateDetailList.find((template)=>{
-       return template.templateID  == this.selectedTemplateID
-     });
-     this.patchConfigForm(filtered);
+    const filtered = this.templateDetailList.find((template) => {
+      return template.templateID == this.selectedTemplateID;
+    });
+
+    if (filtered) {
+      this.templateConfigurationForm.patchValue(filtered);
+    }
   }
+
 
   //Select Region
   onRegionChange() {
-    this.isSelectDisabled=false;
-    this.getallTemplate$.subscribe((response:any) => {
+    this.isSelectDisabled = false;
+    this.getallTemplate$.subscribe((response: any) => {
       if (response) {
-        const allTemp=response as tempList[];
-        this.templateDetailList=allTemp.filter((temp:tempList)=>{
-         return temp.regionID==+this.selectedregionID
-        });       
-        }
+        const allTemp = response as tempList[];
+        this.templateDetailList = allTemp.filter((temp: tempList) => {
+          return temp.regionID == +this.selectedregionID;
+        });
+      }
     });
     this.getRunTempList(this.selectedregionID);
     this.getSToppedTempList(this.selectedregionID);
   }
 
   // return all template
-  getAllTemplates(){
-    this.showLoader=true;
-    this.store.dispatch(new GetAllTemplateAction )
-    .subscribe(
-      (response) => {
-        if (response) {
+ getAllTemplates() {
+    this.showLoader = true;
+    this.store.dispatch(new GetAllTemplateAction)
+      .subscribe(
+        (response) => {
+          if (response) {
+            this.showLoader = false;
+          }
+        },
+        (error) => {
           this.showLoader = false;
         }
-      },
-      (error) => {
-        this.showLoader = false;
-      });
-    
+      );
   }
 
   subscribeToTemplateState(){
@@ -172,44 +183,67 @@ export class MessageControlComponent implements OnInit{
   }
 
 
-  createConfigTemplate(templateModel?:tempConfig){
+  createConfigTemplate(templateModel?: tempConfig) {
     this.templateConfigurationForm = this.formBuilder.group({
-      templateName:[{value:templateModel?.templateName,disabled:true}],
-      templateID:[{value:templateModel?.templateID,disabled:true}],
-      id:[{value:templateModel?.id,disabled:true}],
-      sendAt:[{value:templateModel?.sendAt,disabled:true},Validators.required],
-      sendAfter:[{value:templateModel?.sendAfter ?? '',disabled:true},Validators.required],
-      gender:[{value:templateModel?.gender ?? '',disabled:true},Validators.required],
-      regionID:[{value:templateModel?.regionID ?? '',disabled:true},Validators.required],
-      contentEn:[ {value:templateModel?.contentEn,disabled:true},Validators.required],
-      contentAr:[{value:templateModel?.contentAr,disabled:true},Validators.required],
-      run:[true]
+      templateName: [{ value: templateModel?.templateName, disabled: true }],
+      templateID: [{ value: templateModel?.templateID, disabled: true }],
+      id: [{ value: templateModel?.id, disabled: true }],
+      sendAt: [{ value: templateModel?.sendAt, disabled: true }, Validators.required],
+      sendAfter: [{ value: templateModel?.sendAfter ?? '', disabled: true }, Validators.required],
+      gender: [{ value: templateModel?.gender ?? '', disabled: true }, Validators.required],
+      regionID: [{ value: templateModel?.regionID ?? '', disabled: true }, Validators.required],
+      contentEn: [{ value: templateModel?.contentEn, disabled: true }, Validators.required],
+      contentAr: [{ value: templateModel?.contentAr, disabled: true }, Validators.required],
+      isReminder: [{ value: templateModel?.isReminder, disabled: true }],
+      sendAfterReminder: [{ value: templateModel?.sendAfterReminder, disabled: true }, Validators.required],
+      run: [{ value: templateModel?.run, disabled: true }],
+      
+
     });
   }
+  subscribeToRoleState() {
+    this.getallTemplate$.subscribe((response: any) => {
+      if (response) {
+        const allTemp = response as tempList[];
+        this.templateDetailList = allTemp;
+      }
+    });
 
-  patchConfigForm(templateModel?:tempConfig){
-    const formattedDate = moment(templateModel?.sendAt).format('YYYY-MM-DD');
+  }
+  patchConfigForm(templateModel: tempConfig) {
     this.templateConfigurationForm.patchValue({
-      templateName:templateModel?.templateName,
-      templateID:templateModel?.templateID,
-      id:templateModel?.id,
-      sendAt:formattedDate,
-      sendAfter:Number(templateModel?.sendAfter) ,
-      gender:(templateModel?.gender)==null?'Male':templateModel?.gender,
-      regionID:templateModel?.regionID,
-      contentEn:templateModel?.contentEn,
-      contentAr:templateModel?.contentAr,
-      run:templateModel?.run
+      templateName: templateModel.templateName,
+      templateID: templateModel.templateID,
+      id: templateModel.id,
+      sendAt: templateModel.sendAt,
+      sendAfter: templateModel.sendAfter ?? '',
+      gender: templateModel.gender ?? '',
+      regionID: templateModel.regionID ?? '',
+      contentEn: templateModel.contentEn,
+      contentAr: templateModel.contentAr,
+      isReminder: templateModel.isReminder,
+      sendAfterReminder: templateModel.sendAfterReminder,
+      run: templateModel.run,
+
+
+ 
     });
+
+    this.toggleEditconfig(false);
   }
 
-  getRunTempList(regionId:number){
-    this.runTempList=this.templateDetailList.filter((temp)=> temp.run == true && temp.regionID==regionId)
+  getRunTempList(selectedregionID: number) {
+    const runTemp = this.templateDetailList.filter((temp: tempList) => {
+      return temp.run === true && temp.regionID == selectedregionID;
+    });
+    this.runTempList = runTemp;
   }
-  getSToppedTempList(regionId:number){
-    this.stoppedTempList=this.templateDetailList.filter((temp)=> temp.run == false && temp.regionID==regionId)
+   getSToppedTempList(selectedregionID: number) {
+    const stoppedTemp = this.templateDetailList.filter((temp: tempList) => {
+      return temp.run === false && temp.regionID == selectedregionID;
+    });
+    this.stoppedTempList = stoppedTemp;
   }
-
   updateTemplateStatus(temp:tempConfig){
     this.showLoader=true;
     this.showLoader=true;
@@ -225,18 +259,11 @@ export class MessageControlComponent implements OnInit{
           this.showLoader = false;
         });
   }
+ 
 
-  subscribeToRoleState(){
-    this.role$.subscribe((response:any) => {
-      if (response) {this.userRole=response;this.getRole(this.userRole) }
-      else{
-        const token=JSON.parse(localStorage.getItem('Token') || '{}')
-        this.userRole=token.role
-        this.getRole(this.userRole)
-      }
-
-    });
-  }
+  handleChange(){
+  alert("hello")
+}
   getRole(role:string){
     if(role=='EgyptAdmin'){
       this.selectedregionID=1;
@@ -262,3 +289,5 @@ export class MessageControlComponent implements OnInit{
   }
 
 }
+ 
+ 

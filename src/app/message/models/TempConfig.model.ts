@@ -12,6 +12,8 @@ export class tempConfig{
     contentEn: string
     contentAr: string
     run: boolean
+    sendAfterReminder? : number
+    isReminder? : boolean
 }
 
 export class tempList{
@@ -27,6 +29,8 @@ export class tempList{
     contentAr: string
     run: boolean
     userList?:userList[]
+    sendAfterReminder? : number
+    isReminder? : boolean
 }
 
 // export class smsProviderTemplate{

@@ -25,7 +25,7 @@ export class TemplateService {
   //Edit Template
   editTemplates(id,template:tempConfig): Observable<any> {
     const url = `${this.baseUrl}/EditConfiguration/${id}`;
-    return this.http.put(url,template)
+    return this.http.post(url,template)
       .pipe(
         catchError(this.handleError)
       );
