@@ -31,6 +31,7 @@ export class tempList{
     userList?:userList[]
     sendAfterReminder? : number
     isReminder? : boolean
+  status: string
 }
 
 // export class smsProviderTemplate{

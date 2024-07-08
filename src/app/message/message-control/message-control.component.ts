@@ -32,8 +32,9 @@ export class MessageControlComponent implements OnInit{
   getTodayDate=moment(new Date()).format('YYYY-MM-DD');
   showLoader:boolean=true;
   userRole:string='';
-  isRegionDisabled=false;
-
+  isRegionDisabled = false;
+ 
+ 
   @Select(MessageState.getAllTemplate)
   getallTemplate$!: Observable<tempList>;
 
@@ -46,7 +47,17 @@ export class MessageControlComponent implements OnInit{
     private formBuilder: FormBuilder,
     private toaster: MessageService,
     private store: Store
-  ) {}
+ ) {
+    this.templateConfigurationForm = this.formBuilder.group({
+ isReminder: [false],
+      sendAfter: ['', Validators.required],
+      sendAfterReminder: ['', Validators.required],
+      gender: ['', Validators.required],
+      regionID: ['', Validators.required],
+      contentEn: ['', Validators.required],
+      contentAr: ['', Validators.required]
+    });
+  }
 
  
   ngOnInit(): void {
@@ -66,9 +77,20 @@ export class MessageControlComponent implements OnInit{
       .replace('{{date}}', '29 Feb 2024')
       .replace('{{time}}', '3pm');
         document.getElementById('sendAfter')!.style.display = 'none';
-
+this.templateConfigurationForm.get('isReminder')?.valueChanges.subscribe(value => {
+      this.toggleSendAfterVisibility(value);
+    });
   }  
-
+ 
+  toggleSendAfterVisibility(isReminder: boolean) {
+    if (isReminder) {
+      document.getElementById('sendAfter')!.style.display = 'none';
+      document.getElementById('sendAfterReminder')!.style.display = 'block';
+    } else {
+      document.getElementById('sendAfter')!.style.display = 'block';
+      document.getElementById('sendAfterReminder')!.style.display = 'none';
+    }
+  }
     onIsReminderChange(isChecked: boolean) {
       if (isChecked) {
         this.templateConfigurationForm.get('isReminder')!.setValue(true);
@@ -129,6 +151,16 @@ export class MessageControlComponent implements OnInit{
   //select template
 
   onTemplateChange() {
+        const selectedTemplate = this.templateDetailList.find(t => t.templateID === this.selectedTemplateID);
+    if (selectedTemplate) {
+      if (selectedTemplate.status === 'Active') {
+        this.templateConfigurationForm.get('isReminder')?.setValue(false);
+        this.toggleSendAfterVisibility(false);
+      } else if (selectedTemplate.status === 'Canceled') {
+        this.templateConfigurationForm.get('isReminder')?.setValue(true);
+        this.toggleSendAfterVisibility(true);
+      }
+    }
     const filtered = this.templateDetailList.find((template) => {
       return template.templateID == this.selectedTemplateID;
     });
@@ -150,6 +182,10 @@ export class MessageControlComponent implements OnInit{
         });
       }
     });
+     if (this.selectedregionID === '2') { // KSA
+      this.templateConfigurationForm.get('isReminder')?.setValue(false);
+      this.toggleSendAfterVisibility(false);
+    }
     this.getRunTempList(this.selectedregionID);
     this.getSToppedTempList(this.selectedregionID);
   }

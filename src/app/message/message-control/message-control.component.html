@@ -23,25 +23,24 @@
             <div class="container">
                 <div class="row mb-3">
                     <label class="col-md-auto col-form-label">Region</label>
-                    <div class="col-md">
-                        <select [(ngModel)]="selectedregionID" 
-                                (change)="onRegionChange()" 
-                                [disabled]="isRegionDisabled"
-                                class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy">
-                            <option value="" selected >Select Region</option>
-                            <option value="1"  >Egypt</option>
-                            <option value="2" >KSA</option>
-                            <option value="3" >UAE</option>
-                            <option value="4" >QATAR</option>
+                      <div class="col-md">
+                        <select [(ngModel)]="selectedregionID" (change)="onRegionChange()" [disabled]="isRegionDisabled"
+                            class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                            <option value="" selected>Select Region</option>
+                            <option value="1">Egypt</option>
+                            <option value="2">KSA</option>
+                            <option value="3">UAE</option>
+                            <option value="4">QATAR</option>
                         </select>
                     </div>
                     <label class="col-md-auto col-form-label">Template Name</label>
                     <div class="col-md">
-                        <select [(ngModel)]="selectedTemplateID" (change)="onTemplateChange()" 
-                                [disabled]="isSelectDisabled"
-                                class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy">
-                            <option value="" >Choose your Template</option>
-                            <option *ngFor="let templateDetail of templateDetailList" [value]="templateDetail.templateID" >{{templateDetail.templateName}}</option>
+                        <select [(ngModel)]="selectedTemplateID" (change)="onTemplateChange()" [disabled]="isSelectDisabled"
+                            class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                            <option value="">Choose your Template</option>
+                            <option *ngFor="let templateDetail of templateDetailList" [value]="templateDetail.templateID">
+                                {{templateDetail.templateName}}
+                            </option>
                         </select>
                        
                     </div>
@@ -71,7 +70,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-xl-2 col-sm-6 align-self-center">
-                            <div class="d-flex gap-3 align-items-center">
+                            <!-- <div class="d-flex gap-3 align-items-center">
                                 <label  class="col-form-label" >Is Reminder :</label> 
                                 <input formControlName="isReminder"
                                 onchange="if(this.checked){
@@ -85,8 +84,11 @@
    
        class="isReminderInput form-check-input"
        type="checkbox">
-
-                                <!--container-->
+ 
+                            </div> -->
+                                   <div class="d-flex gap-3 align-items-center">
+                                <label class="col-form-label">Is Reminder:</label>
+                                <input formControlName="isReminder" class="isReminderInput form-check-input" type="checkbox">
                             </div>
                        <p *ngIf="templateConfigurationForm?.get('isReminder')?.invalid && templateConfigurationForm?.get('isReminder')?.touched"
                class="text-danger" role="alert">
@@ -98,12 +100,12 @@
                             <div class="mb-3">
                                 <label class="col-form-label" >Send after :</label>
                                 <!-- <input class="form-control" type="time" value="13:45:00" id="example-time-input" min='01' max='02'> -->
-                                  <select formControlName="sendAfter" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
-                    <option value="" selected>Send After</option>
-                    <option value="10">10 Min</option>
-                    <option value="15">15 Min</option>
-                    <option value="30">30 Min</option>
-                </select>
+                               <select formControlName="sendAfter" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                                    <option value="" selected>Send After</option>
+                                    <option value="10">10 Min</option>
+                                    <option value="15">15 Min</option>
+                                    <option value="30">30 Min</option>
+                                </select>
                                 <!--container-->
                             </div>
                                 <p *ngIf="templateConfigurationForm?.get('sendAfter')?.invalid && templateConfigurationForm?.get('sendAfter')?.touched"
@@ -117,12 +119,11 @@
                             <div class="mb-3">
                                 <label class="col-form-label" >Send after Reminder :</label>
                                 <!-- <input class="form-control" type="time" value="13:45:00" id="example-time-input" min='01' max='02'> -->
-                                <select formControlName="sendAfterReminder" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Bitcoin">
-                                    <option value="" selected >send After Reminder</option>
-                                    <option  value="1"
-                                     >1 Month </option>
-                                    <option value="2" >2  Months</option>
-                                    <option value="3" >3 Months</option>
+                               <select formControlName="sendAfterReminder" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                                    <option value="" selected>Send After Reminder</option>
+                                    <option value="1">1 Month</option>
+                                    <option value="2">2 Months</option>
+                                    <option value="3">3 Months</option>
                                 </select>
                                 <!--container-->
                             </div>
@@ -139,9 +140,9 @@
                         <div  class="col-xl col-sm-6">
                             <div  class="mb-3">
                                 <label class="col-form-label">Gender</label>
-                                <select formControlName="gender" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy">
-                                    <option value="" >Select Gender</option>
-                                    <option value="Male" >Male</option>
+                                <select formControlName="gender" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                     <option value="null">Both Gender</option>
                                 </select>
