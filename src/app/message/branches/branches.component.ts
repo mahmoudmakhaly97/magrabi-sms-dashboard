@@ -31,6 +31,7 @@ export class BranchesComponent implements OnInit {
   editMode: boolean = false;
   userRole: string = '';
  deactivatedBranches: any[] = []; 
+ 
   @Select(branchState.getbranches)
   getAllBranches$!: Observable<any>;
 
@@ -61,7 +62,10 @@ export class BranchesComponent implements OnInit {
       pWord: ['', Validators.required],
       serviceProviderAccessToken: ['', Validators.required],
       spapiLink: ['', Validators.required],
-      dbName: ['', Validators.required]
+      dbName: ['', Validators.required],
+      allBranchList:  []  , // Initialize empty array or fetch initial data from service
+      editMode : false
+
     });
   }
 
@@ -74,6 +78,40 @@ export class BranchesComponent implements OnInit {
     this.subscribeToRoleState();
 
   }
+ 
+
+ 
+  getEmailsArray(): string[] {
+    return this.addBranchForm.get('emailsAdmin')!.value.split(',');
+}
+getPhonesArray(){
+  return this.addBranchForm.get('mobilesAdmin')!.value.split(',');
+
+}
+
+addEmail(email: string): void {
+    const currentEmails = this.addBranchForm.get('emailsAdmin')!.value;
+    const updatedEmails = currentEmails ? `${currentEmails},${email}` : email;
+    this.addBranchForm.get('emailsAdmin')!.setValue(updatedEmails);
+    // Clear the input field after adding email
+}
+addPhone(phone: string): void {
+  const currentPhones = this.addBranchForm.get('mobilesAdmin')!.value;
+  const updatedPhones= currentPhones ? `${currentPhones},${phone}` : phone;
+  this.addBranchForm.get('mobilesAdmin')!.setValue(updatedPhones);
+  // Clear the input field after adding email
+}
+removeEmail(email: string): void {
+    const currentEmails = this.addBranchForm.get('emailsAdmin')!.value.split(',');
+    const updatedEmails = currentEmails.filter(e => e !== email).join(',');
+    this.addBranchForm.get('emailsAdmin')!.setValue(updatedEmails);
+}
+
+removePhone(phone: string): void {
+  const currentPhones = this.addBranchForm.get('mobilesAdmin')!.value.split(',');
+  const updatedPhones = currentPhones.filter(e => e !== phone).join(',');
+  this.addBranchForm.get('mobilesAdmin')!.setValue(updatedPhones);
+}
   subscribeToRoleState() {
     this.role$.subscribe((response: any) => {
       if (response) {
@@ -181,6 +219,7 @@ submit() {
           this.getAllBranchesList();
           this.subscribeToBranchesList(); 
           this.editMode = false; 
+          window.location.reload(); // Force reload after successful update
         }
       },
       (error) => {
