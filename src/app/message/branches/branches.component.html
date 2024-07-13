@@ -15,6 +15,8 @@
     <div #targetForm class="content">
         <div class="card-widget">
             <div class="container">
+             <div class="branch-data mb-4 p-4 rounded-3">
+                <h3 class="mb-4">Branch Data : </h3>
                 <div class="row mb-3">
                     <label class="col-md-3 col-form-label">Regions</label>
                     <div class="col-md-3">
@@ -76,7 +78,6 @@
                         </div>
                     </div>
                 </div>
-             
                 <div class="row mb-3">
                     <label class="col-md-3 col-form-label">Geo Location</label>
                     <div class="col-md-9">
@@ -87,6 +88,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="row mb-3">
                     <label class="col-md-3 col-form-label">Google Review Link</label>
                     <div class="col-md-9">
@@ -107,7 +109,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-3">
+                   <div class="row mb-3">
                     <label class="col-md-3 col-form-label">Admin PhoneNumbers</label>
                     <div class="col-md-9">
                         <textarea rows="3" formControlName="mobilesAdmin" class="form-control" type="text"
@@ -117,19 +119,12 @@
                         </div>
                     </div>
                 </div>
-               
-                 <div class="row mb-3">
-                    <label class="col-md-3 col-form-label">Sender</label>
-                    <div class="col-md-9">
-                        <input formControlName="sender" class="form-control" type="text"
-                            [class.is-invalid]="addBranchForm.get('sender')?.hasError('required') && addBranchForm.get('sender')?.touched">
-                        <div *ngIf="addBranchForm.get('sender')?.hasError('required') && addBranchForm.get('sender')?.touched"
-                            class="invalid-feedback">Field is required
-                        </div>
-                    </div>
-                </div>
-                
+             </div>
             
+             
+             <div class="branch-data mb-4 p-4 rounded-3">
+                <!-- ............ -->
+                <h3 class="mb-4">  Data Base : </h3>
                 <div class="row mb-3">
                     <label class="col-md-3 col-form-label">Port Number</label>
                     <div class="col-md-9">
@@ -191,13 +186,34 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Database Name</label>
+                    <div class="col-md-9">
+                        <input formControlName="dbName" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('dbName')?.hasError('required') && addBranchForm.get('dbName')?.touched">
+                        <div *ngIf="addBranchForm.get('dbName')?.hasError('required') && addBranchForm.get('dbName')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+                <!-- ............ -->
+             </div>
+           
+               
+             <div class="branch-data  p-4 rounded-3">
+                <!-- ............ -->
+                <h3 class="mb-4">     From the service provider:                    : </h3>
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">Sender</label>
+                    <div class="col-md-9">
+                        <input formControlName="sender" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('sender')?.hasError('required') && addBranchForm.get('sender')?.touched">
+                        <div *ngIf="addBranchForm.get('sender')?.hasError('required') && addBranchForm.get('sender')?.touched"
+                            class="invalid-feedback">Field is required
+                        </div>
+                    </div>
+                </div>
+        
                 <div class="row mb-3">
                     <label class="col-md-3 col-form-label">Service Provider's Access Token</label>
                     <div class="col-md-9">
@@ -219,16 +235,10 @@
                         </div>
                     </div>
                 </div>
-<div class="row mb-3">
-                    <label class="col-md-3 col-form-label">Database Name</label>
-                    <div class="col-md-9">
-                        <input formControlName="dbName" class="form-control" type="text"
-                            [class.is-invalid]="addBranchForm.get('dbName')?.hasError('required') && addBranchForm.get('dbName')?.touched">
-                        <div *ngIf="addBranchForm.get('dbName')?.hasError('required') && addBranchForm.get('dbName')?.touched"
-                            class="invalid-feedback">Field is required
-                        </div>
-                    </div>
-                </div>
+                </div>  
+               
+                
+
             </div><!--container-sm-->
 
         </div><!--card-widget-->
