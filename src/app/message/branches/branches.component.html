@@ -107,7 +107,7 @@
                                 {{ email }}
                                 <span (click)="removeEmail(email)" class="email-remove">x</span>
                             </div>
-                            <input #newEmail (keydown.enter)="addEmail(newEmail.value)" class="form-control form-control-sm" type="text" placeholder="Add new email..." />
+                            <input id="emails" #newEmail (keydown.enter)="addEmail(newEmail.value)" class="form-control form-control-sm" type="text" placeholder="Add new email..." />
                         </div>
                     </div>
                 </div>
@@ -119,21 +119,12 @@
                                 {{ phone }}
                                 <span (click)="removePhone(phone)" class="email-remove">x</span>
                             </div>
-                            <input #newPhone (keydown.enter)="addPhone(newPhone.value)" class="form-control form-control-sm" type="text" placeholder="Add new phone..." />
+                            <input id="phones" #newPhone (keydown.enter)="addPhone(newPhone.value)" class="form-control form-control-sm" type="text" placeholder="Add new phone..." />
                         </div>
                     </div>
                 </div>
                
-                   <!-- <div class="row mb-3">
-                    <label class="col-md-3 col-form-label">Admin PhoneNumbers</label>
-                    <div class="col-md-9">
-                        <textarea rows="3" formControlName="mobilesAdmin" class="form-control" type="text"
-                            [class.is-invalid]="addBranchForm.get('mobilesAdmin')?.hasError('required') && addBranchForm.get('mobilesAdmin')?.touched"></textarea>
-                        <div *ngIf="addBranchForm.get('mobilesAdmin')?.hasError('required') && addBranchForm.get('mobilesAdmin')?.touched"
-                            class="invalid-feedback">Field is required
-                        </div>
-                    </div>
-                </div> -->
+                  
              </div>
             
              

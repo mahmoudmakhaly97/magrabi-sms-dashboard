@@ -440,8 +440,12 @@ submit() {
   }
 
   reset() {
+      const emailsAdminInput = document.getElementById('emails') as HTMLInputElement;
+  const mobilesAdminInput = document.getElementById('phones') as HTMLInputElement;
     this.addBranchForm.reset();
     this.editMode = false;
+    emailsAdminInput.value = '';
+    mobilesAdminInput.value = '';
   }
 
   editBranch(branch: any) {
