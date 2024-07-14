@@ -6,7 +6,7 @@
         <h4 class="page-title-text me-auto"></h4>
         <div class="page-title-end mt-4">
             <a (click)="reset()" class="btn btn-outline-dark btn-sm ms-1">Cancel</a>
-            <button  (click)="submit()" class="btn btn-primary btn-sm ms-1">
+            <button id="btnSubmit"  (click)="submit()" class="btn btn-primary btn-sm ms-1">
                 {{editMode==true?'Update Branch':'Create Branch'}}
             </button>
         </div>
@@ -99,30 +99,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <label class="col-md-3 col-form-label">Admin Emails</label>
-                    <div class="col-md-9">
-                        <div class="form-control mt-3" style="height: auto; min-height: 38px;">
-                            <div *ngFor="let email of getEmailsArray()" class="email-pill">
-                                {{ email }}
-                                <span (click)="removeEmail(email)" class="email-remove">x</span>
-                            </div>
-                            <input id="emails" #newEmail (keydown.enter)="addEmail(newEmail.value)" class="form-control form-control-sm" type="text" placeholder="Add new email..." />
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-md-3 col-form-label">Admin Phone Numbers</label>
-                    <div class="col-md-9">
-                        <div class="form-control mt-3" style="height: auto; min-height: 38px;">
-                            <div *ngFor="let phone of getPhonesArray()" class="email-pill">
-                                {{ phone }}
-                                <span (click)="removePhone(phone)" class="email-remove">x</span>
-                            </div>
-                            <input id="phones" #newPhone (keydown.enter)="addPhone(newPhone.value)" class="form-control form-control-sm" type="text" placeholder="Add new phone..." />
-                        </div>
-                    </div>
-                </div>
+   <div class="row mb-3">
+    <label class="col-md-3 col-form-label">Admin Emails</label>
+    <div class="col-md-9">
+        <div class="form-control mt-3" style="height: auto; min-height: 38px;">
+            <div *ngFor="let email of getEmailsArray()" class="email-pill">
+                {{ email }}
+                <span (click)="removeEmail(email)" class="email-remove">x</span>
+            </div>
+            <input id="emails" #newEmail (keydown.enter)="addEmail(newEmail.value); $event.preventDefault()" class="form-control form-control-sm" type="text" placeholder="Add new email..." />
+        </div>
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-md-3 col-form-label">Admin Phone Numbers</label>
+    <div class="col-md-9">
+        <div class="form-control mt-3" style="height: auto; min-height: 38px;">
+            <div *ngFor="let phone of getPhonesArray()" class="email-pill">
+                {{ phone }}
+                <span (click)="removePhone(phone)" class="email-remove">x</span>
+            </div>
+            <input id="phones" #newPhone (keydown.enter)="addPhone(newPhone.value); $event.preventDefault()" class="form-control form-control-sm" type="text" placeholder="Add new phone..." />
+        </div>
+    </div>
+</div>
+
                
                   
              </div>

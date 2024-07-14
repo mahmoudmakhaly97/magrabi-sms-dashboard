@@ -204,35 +204,35 @@ removePhone(phone: string): void {
   onAreaChange() {
     this.addBranchForm.patchValue({ areaID: this.selectedAreaID })
   }
-
 submit() {
   this.showLoader = true;
   let showToast = false;
 
   if (this.editMode) {
+    // Update existing branch
     this.store.dispatch(new EditBranchAction(this.addBranchForm.value)).subscribe(
       (response) => {
         if (response) {
-          showToast = true; 
+          showToast = true; // Set showToast to true after successful update
           this.showLoader = false;
           this.reset();
           this.getAllBranchesList();
-          this.subscribeToBranchesList(); 
-          this.editMode = false; 
-          window.location.reload(); // Force reload after successful update
+          this.editMode = false; // Reset editMode to false
+          this.updateButtonText("Create Branch"); // Change button text
+           window.location.reload();
         }
       },
       (error) => {
         this.showLoader = false;
+        console.error('Error updating branch:', error);
       }
     );
   } else {
-
+    // Logic for adding new branch
     this.http.get<any[]>('http://service.themagsmen.com/api/DeactiveBranches').subscribe(
       (deactivatedBranches: any[]) => {
         if (deactivatedBranches && deactivatedBranches.length > 0) {
-          const firstBranch = deactivatedBranches[0]; 
-          
+          const firstBranch = deactivatedBranches[0];
           this.addBranchForm.patchValue({
             regionID: firstBranch.regionID,
             areaID: firstBranch.areaID,
@@ -258,13 +258,12 @@ submit() {
             dbName: firstBranch.dbName
           });
 
-
           this.store.dispatch(new AddNewBranchAction(this.addBranchForm.value)).subscribe(
             (response) => {
               if (response) {
                 this.showLoader = false;
-                this.getAllBranchesList(); 
-                this.editMode = true; 
+                this.getAllBranchesList();
+                this.editMode = true; // Set editMode for future edits
               }
             },
             (error) => {
@@ -284,14 +283,20 @@ submit() {
     );
   }
 
-
   setTimeout(() => {
     if (showToast) {
-
       console.log('Toast shown after update');
     }
   }, 0);
 }
+
+updateButtonText(text: string) {
+  const submitButton = document.getElementById("btnSubmit");
+  if (submitButton) {
+    submitButton.innerText = text;
+  }
+}
+
 // submit() {
 //   this.showLoader = true;
 //   let showToast = false; // Initialize showToast flag
@@ -400,7 +405,7 @@ submit() {
 
   // return all Branches
   getAllBranchesList() {
-    this.showLoader = true;
+    this.showLoader = false;
     this.store.dispatch(new GetAllBranchesAction)
       .subscribe(
         (response) => {
@@ -443,7 +448,7 @@ submit() {
       const emailsAdminInput = document.getElementById('emails') as HTMLInputElement;
   const mobilesAdminInput = document.getElementById('phones') as HTMLInputElement;
     this.addBranchForm.reset();
-    this.editMode = false;
+    this.editMode = true;
     emailsAdminInput.value = '';
     mobilesAdminInput.value = '';
   }
