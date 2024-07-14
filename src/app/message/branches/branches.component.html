@@ -107,7 +107,7 @@
                 {{ email }}
                 <span (click)="removeEmail(email)" class="email-remove">x</span>
             </div>
-            <input id="emails" #newEmail (keydown.enter)="addEmail(newEmail.value); $event.preventDefault()" class="form-control form-control-sm" type="text" placeholder="Add new email..." />
+            <input formControlName="emailsAdmin" id="emails" #newEmail (keydown.enter)="addEmail(newEmail.value); $event.preventDefault()" class="form-control form-control-sm" type="text" placeholder="Add new email..." />
         </div>
     </div>
 </div>
@@ -119,7 +119,7 @@
                 {{ phone }}
                 <span (click)="removePhone(phone)" class="email-remove">x</span>
             </div>
-            <input id="phones" #newPhone (keydown.enter)="addPhone(newPhone.value); $event.preventDefault()" class="form-control form-control-sm" type="text" placeholder="Add new phone..." />
+            <input formControlName="mobilesAdmin" id="phones" #newPhone (keydown.enter)="addPhone(newPhone.value); $event.preventDefault()" class="form-control form-control-sm" type="text" placeholder="Add new phone..." />
         </div>
     </div>
 </div>
@@ -131,7 +131,7 @@
              
              <div class="branch-data mb-4 p-4 rounded-3">
                 <!-- ............ -->
-                <h3 class="mb-4">  Data Base : </h3>
+                <h3 class="mb-4">  DataBase : </h3>
                 <div class="row mb-3">
                     <label class="col-md-3 col-form-label">Port Number</label>
                     <div class="col-md-9">
@@ -194,7 +194,7 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-md-3 col-form-label">Database Name</label>
+                    <label class="col-md-3 col-form-label">DatabaseName</label>
                     <div class="col-md-9">
                         <input formControlName="dbName" class="form-control" type="text"
                             [class.is-invalid]="addBranchForm.get('dbName')?.hasError('required') && addBranchForm.get('dbName')?.touched">
@@ -209,24 +209,24 @@
                
              <div class="branch-data  p-4 rounded-3">
                 <!-- ............ -->
-                <h3 class="mb-4">     From the service provider:                    : </h3>
-                <div class="row mb-3">
-                    <label class="col-md-3 col-form-label">Sender</label>
-                    <div class="col-md-9">
-                        <input formControlName="sender" class="form-control" type="text"
-                            [class.is-invalid]="addBranchForm.get('sender')?.hasError('required') && addBranchForm.get('sender')?.touched">
-                        <div *ngIf="addBranchForm.get('sender')?.hasError('required') && addBranchForm.get('sender')?.touched"
-                            class="invalid-feedback">Field is required
-                        </div>
-                    </div>
-                </div>
+                <h3 class="mb-4">     From the service provider                    : </h3>
+      <div class="row mb-3">
+  <label class="col-md-3 col-form-label">Sender</label>
+  <div class="col-md-9">
+    <input formControlName="sender" class="form-control" type="text"
+           [class.is-invalid]="addBranchForm.get('sender')?.hasError('required') && addBranchForm.get('sender')?.touched">
+    <div *ngIf="addBranchForm.get('sender')?.hasError('required') && addBranchForm.get('sender')?.touched"
+         class="invalid-feedback">Field is required
+    </div>
+  </div>
+</div>
         
                 <div class="row mb-3">
                     <label class="col-md-3 col-form-label">Service Provider's Access Token</label>
                     <div class="col-md-9">
-                        <input formControlName="serviceProviderAccessToken" class="form-control" type="text"
-                            [class.is-invalid]="addBranchForm.get('serviceProviderAccessToken')?.hasError('required') && addBranchForm.get('serviceProviderAccessToken')?.touched">
-                        <div *ngIf="addBranchForm.get('serviceProviderAccessToken')?.hasError('required') && addBranchForm.get('serviceProviderAccessToken')?.touched"
+                        <input formControlName="bearerT" class="form-control" type="text"
+                            [class.is-invalid]="addBranchForm.get('bearerT')?.hasError('required') && addBranchForm.get('bearerT')?.touched">
+                        <div *ngIf="addBranchForm.get('bearerT')?.hasError('required') && addBranchForm.get('bearerT')?.touched"
                             class="invalid-feedback">Field is required
                         </div>
                     </div>

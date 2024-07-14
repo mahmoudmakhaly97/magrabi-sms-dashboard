@@ -30,9 +30,14 @@ export class BranchesComponent implements OnInit {
   allAreasList: any = [];
   editMode: boolean = false;
   userRole: string = '';
- deactivatedBranches: any[] = []; 
- 
-  @Select(branchState.getbranches)
+  deactivatedBranches: any[] = []; 
+  dbName: string = '';
+  spapiLink: string = '';
+  sender: string = '';
+  bearerT: string = '';
+
+
+   @Select(branchState.getbranches)
   getAllBranches$!: Observable<any>;
 
   @Select(branchState.getAreas)
@@ -40,19 +45,21 @@ export class BranchesComponent implements OnInit {
 
   @Select(AuthState.role)
   role$!: Observable<AuthLogin>;
+  showToast: boolean;
 
 
 
  constructor(private http: HttpClient, private fb: FormBuilder,private formBuilder: FormBuilder, private store: Store) {
     this.addBranchForm = this.fb.group({
-      regionID: ['', Validators.required],
+      id: [''],
       areaID: ['', Validators.required],
       name: ['', Validators.required],
       nameAr: ['', Validators.required],
       branchCode: ['', Validators.required],
-      geoLocation: ['', Validators.required],
       googleReviewLink: ['', Validators.required],
       emailsAdmin: ['', Validators.required],
+      geoLocation: ['', Validators.required],
+      regionID: ['', Validators.required],
       mobilesAdmin: ['', Validators.required],
       sender: ['', Validators.required],
       portNum: ['', Validators.required],
@@ -60,13 +67,12 @@ export class BranchesComponent implements OnInit {
       serverName: ['', Validators.required],
       uName: ['', Validators.required],
       pWord: ['', Validators.required],
-      serviceProviderAccessToken: ['', Validators.required],
-      spapiLink: ['', Validators.required],
       dbName: ['', Validators.required],
-      allBranchList:  []  , // Initialize empty array or fetch initial data from service
-      editMode : false
-
-    });
+      bearerT: ['', Validators.required],
+      spapiLink: ['', Validators.required],
+      active: [true, Validators.required], 
+       
+     });
   }
 
   ngOnInit(): void {
@@ -157,29 +163,26 @@ removePhone(phone: string): void {
   }
   createBranchForm(branchModel?: createBranch) {
     this.addBranchForm = this.formBuilder.group({
-      id: [branchModel?.id ?? ''],
+       id: [branchModel?.id ?? ''],
       name: [branchModel?.name ?? '', [Validators.required]],
       nameAr: [branchModel?.nameAr ?? '', [Validators.required]],
       branchCode: [branchModel?.branchCode ?? '', [Validators.required]],
       geoLocation: [branchModel?.geoLocation ?? '', [Validators.required]],
       googleReviewLink: [branchModel?.googleReviewLink ?? '', [Validators.required]],
       regionID: [branchModel?.regionID ?? '', [Validators.required]],
-      bearerT: [branchModel?.bearerT ?? '', [Validators.required]],
-      areaID: [branchModel?.areaID ?? '', [Validators.required]],
-      spapiLink: [branchModel?.spapiLink ?? '', [Validators.required]],
       sender: [branchModel?.sender ?? '', [Validators.required]],
-      serverIP: [branchModel?.serverIP ?? '', [Validators.required]],
-      emailsAdmin: [branchModel?.emailsAdmin ?? '', [Validators.required]],
-      mobilesAdmin: [branchModel?.mobilesAdmin ?? '', [Validators.required]],
-      serviceProviderAccessToken: [branchModel?.serviceProviderAccessToken ?? '', [Validators.required]],
-      ipAddress: [branchModel?.ipAddress ?? '', [Validators.required]],
       serverName: [branchModel?.serverName ?? '', [Validators.required]],
       portNum: [branchModel?.portNum ?? '', [Validators.required]],
-      apiLink: [branchModel?.apiLink ?? '', [Validators.required]],
       uName: [branchModel?.uName ?? '', [Validators.required]],
       pWord: [branchModel?.pWord ?? '', [Validators.required]],
       dbName: [branchModel?.dbName ?? '', [Validators.required]],
-    })
+      active: [branchModel?.active ?? '', [Validators.required]],
+      bearerT: [branchModel?.bearerT ?? '', [Validators.required]],
+      spapiLink: [branchModel?.spapiLink ?? '', [Validators.required]],
+      emailsAdmin: [branchModel?.emailsAdmin ?? '', [Validators.required]],
+      mobilesAdmin: [branchModel?.mobilesAdmin ?? '', [Validators.required]],
+      serverIP: [branchModel?.serverIP ?? '', [Validators.required]],
+       })
   }
 
   setBearerToken(regionID: number) {
@@ -208,20 +211,26 @@ submit() {
   this.showLoader = true;
   let showToast = false;
 
+  const branchData = this.addBranchForm.value;
+ 
   if (this.editMode) {
-    // Update existing branch
-    this.store.dispatch(new EditBranchAction(this.addBranchForm.value)).subscribe(
+   
+    this.store.dispatch(new EditBranchAction(branchData)).subscribe(
+
       (response) => {
         if (response) {
-          showToast = true; // Set showToast to true after successful update
+          showToast = true; 
           this.showLoader = false;
           this.reset();
-          this.getAllBranchesList();
-          this.editMode = false; // Reset editMode to false
-          this.updateButtonText("Create Branch"); // Change button text
-           window.location.reload();
+           this.editMode = false;
+                  this.getAllBranchesList();
+
+          this.updateButtonText("Create Branch"); 
+          //  window.location.reload();
+
+          
         }
-      },
+       },
       (error) => {
         this.showLoader = false;
         console.error('Error updating branch:', error);
@@ -234,31 +243,34 @@ submit() {
         if (deactivatedBranches && deactivatedBranches.length > 0) {
           const firstBranch = deactivatedBranches[0];
           this.addBranchForm.patchValue({
-            regionID: firstBranch.regionID,
-            areaID: firstBranch.areaID,
-            bearerT: firstBranch.bearerT,
-            id: firstBranch.id,
-            apiLink: firstBranch.apiLink,
-            ipAddress: firstBranch.ipAddress,
+       id: firstBranch.id,
             name: firstBranch.name,
             nameAr: firstBranch.nameAr,
             branchCode: firstBranch.branchCode,
             geoLocation: firstBranch.geoLocation,
             googleReviewLink: firstBranch.googleReviewLink,
-            emailsAdmin: firstBranch.emailsAdmin,
-            mobilesAdmin: firstBranch.mobilesAdmin,
+            regionID: firstBranch.regionID,
             sender: firstBranch.sender,
-            portNum: firstBranch.portNum,
-            serverIP: firstBranch.serverIP,
             serverName: firstBranch.serverName,
+            portNum: firstBranch.portNum,
             uName: firstBranch.uName,
             pWord: firstBranch.pWord,
-            serviceProviderAccessToken: firstBranch.serviceProviderAccessToken,
+            dbName: firstBranch.dbName,
+            active: firstBranch.active,
+            bearerT: firstBranch.bearerT,
             spapiLink: firstBranch.spapiLink,
-            dbName: firstBranch.dbName
+            areaID: firstBranch.areaID,
+            emailsAdmin: firstBranch.emailsAdmin,
+            mobilesAdmin: firstBranch.mobilesAdmin,
+            serverIP: firstBranch.serverIP,
+
           });
 
-          this.store.dispatch(new AddNewBranchAction(this.addBranchForm.value)).subscribe(
+  
+
+
+
+          this.store.dispatch(new AddNewBranchAction(branchData)).subscribe(
             (response) => {
               if (response) {
                 this.showLoader = false;
@@ -281,6 +293,7 @@ submit() {
         console.error('Error fetching deactivated branches:', error);
       }
     );
+
   }
 
   setTimeout(() => {
@@ -296,97 +309,7 @@ updateButtonText(text: string) {
     submitButton.innerText = text;
   }
 }
-
-// submit() {
-//   this.showLoader = true;
-//   let showToast = false; // Initialize showToast flag
-
-//   if (this.editMode) {
-//     // Update existing branch
-//     this.store.dispatch(new EditBranchAction(this.addBranchForm.value)).subscribe(
-//       (response) => {
-//         if (response) {
-//           showToast = true; // Set showToast to true after successful update
-//           this.showLoader = false;
-//           this.reset();
-//           this.getAllBranchesList(); // Refresh active branches list
-//           this.subscribeToBranchesList(); // Subscribe to changes
-//           this.editMode = false; // Reset editMode to false
-//         }
-//       },
-//       (error) => {
-//         this.showLoader = false;
-//       }
-//     );
-//   } else {
-//     // Add new branch (deactivated branch)
-//     this.http.get<any[]>('http://service.themagsmen.com/api/DeactiveBranches').subscribe(
-//       (deactivatedBranches: any[]) => {
-//         if (deactivatedBranches && deactivatedBranches.length > 0) {
-//           const firstBranch = deactivatedBranches[0]; // Get the first deactivated branch
-          
-//           // Patch form values with deactivated branch details
-//           this.addBranchForm.patchValue({
-//             regionID: firstBranch.regionID,
-//             areaID: firstBranch.areaID,
-//             bearerT: firstBranch.bearerT,
-//             id: firstBranch.id,
-//             apiLink: firstBranch.apiLink,
-//             ipAddress: firstBranch.ipAddress,
-//             name: firstBranch.name,
-//             nameAr: firstBranch.nameAr,
-//             branchCode: firstBranch.branchCode,
-//             geoLocation: firstBranch.geoLocation,
-//             googleReviewLink: firstBranch.googleReviewLink,
-//             emailsAdmin: firstBranch.emailsAdmin,
-//             mobilesAdmin: firstBranch.mobilesAdmin,
-//             sender: firstBranch.sender,
-//             portNum: firstBranch.portNum,
-//             serverIP: firstBranch.serverIP,
-//             serverName: firstBranch.serverName,
-//             uName: firstBranch.uName,
-//             pWord: firstBranch.pWord,
-//             serviceProviderAccessToken: firstBranch.serviceProviderAccessToken,
-//             spapiLink: firstBranch.spapiLink,
-//             dbName: firstBranch.dbName
-//           });
-
-//           // Now dispatch action to add new branch
-//           this.store.dispatch(new AddNewBranchAction(this.addBranchForm.value)).subscribe(
-//             (response) => {
-//               if (response) {
-//                 this.showLoader = false;
-//                 this.getAllBranchesList(); // Refresh active branches list
-//                 this.editMode = true; // Set editMode back to true for next edit
-//               }
-//             },
-//             (error) => {
-//               this.showLoader = false;
-//               console.error('Error adding new branch:', error);
-//             }
-//           );
-//         } else {
-//           // Handle case where no deactivated branches are found
-//           this.showLoader = false;
-//           console.log('No deactivated branches found.');
-//         }
-//       },
-//       (error) => {
-//         this.showLoader = false;
-//         console.error('Error fetching deactivated branches:', error);
-//       }
-//     );
-//   }
-
-//   // Show toast conditionally based on showToast flag
-//   setTimeout(() => {
-//     if (showToast) {
-//       // Display your toast message here
-//       console.log('Toast shown after update');
-//     }
-//   }, 0); // Use setTimeout to ensure it runs after other operations
-// }
-
+ 
   subscribeToBranchesList() {
     this.getAllBranches$.subscribe((response: any) => {
       if (response) {
@@ -454,39 +377,46 @@ updateButtonText(text: string) {
   }
 
   editBranch(branch: any) {
-    console.log("branchh", branch)
-    this.updateBranchForm(branch);
-    this.setBearerToken(branch.regionID);
-    this.getAllAreasListById(branch.regionID)
-    this.scrollToForm();
-    this.editMode = true;
+      
+    
+     this.showToast = true;
+  this.updateBranchForm(branch);
+  this.setBearerToken(branch.regionID);
+  this.getAllAreasListById(branch.regionID);
+  this.scrollToForm();
+  this.editMode = true;
+  this.updateBranchForm(branch); // Ensure this has the updated values
+  this.setBearerToken(branch.regionID);
+  this.getAllAreasListById(branch.regionID);
+  this.scrollToForm();
   }
 
-  async updateBranchForm(branchModel?: createBranch) {
-    // Then update the form values
-    this.addBranchForm.patchValue({
-      id: branchModel?.id ?? '',
+async updateBranchForm(branchModel?: createBranch) {
+     this.addBranchForm.patchValue({
+       id: branchModel?.id ?? '',
       regionID: branchModel?.regionID ?? '',
       areaID: branchModel?.areaID ?? '',
       name: branchModel?.name ?? '',
       branchCode: branchModel?.branchCode ?? '',
       geoLocation: branchModel?.geoLocation ?? '',
       googleReviewLink: branchModel?.googleReviewLink ?? '',
- emailsAdmin: branchModel?.emailsAdmin ?? '',
+      emailsAdmin: branchModel?.emailsAdmin ?? '',
       mobilesAdmin: branchModel?.mobilesAdmin ?? '',
-      spapiLink: branchModel?.spapiLink ?? '',
-      sender : branchModel?.sender ?? '',
-      serverIP : branchModel?.serverIP ?? '',
- portNum      : branchModel?.portNum ?? '',
+      sender: branchModel?.sender ?? '',
+      portNum: branchModel?.portNum ?? '',
       nameAr: branchModel?.nameAr ?? '',
-      bearerT: branchModel?.bearerT ?? '',
       pWord: branchModel?.pWord ?? '',
       dbName: branchModel?.dbName ?? '',
       uName: branchModel?.uName ?? '',
-
-       
+      serverName: branchModel?.serverName ?? '',
+      bearerT: branchModel?.bearerT ?? '',
+      spapiLink: branchModel?.spapiLink ?? '',
+      active: branchModel?.active ?? '',
+      serverIP: branchModel?.serverIP ?? '',
     });
-  }
+    console.log('Form values after patching:', this.addBranchForm.value);
+}
+
 
   scrollToForm() {
     if (this.targetForm && this.targetForm.nativeElement) {

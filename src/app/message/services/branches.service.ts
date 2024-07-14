@@ -43,7 +43,9 @@ export class BranchesService {
       );
   }
  editBranch(branch: createBranch): Observable<any> {
-    const url = `http://service.themagsmen.com/api/EditBranch/1`;
+   const url = `http://service.themagsmen.com/api/EditBranch/1`;
+ 
+   
     return this.http.post(url, branch)
       .pipe(
         catchError(this.handleError)
