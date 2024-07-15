@@ -1,19 +1,23 @@
 import { userList } from "./user.model"
 
 export class tempConfig{
-    id:number 
-    templateName: string
-    templateID:number
-    sendAt: string
-    sendAfter: number
+    id?:number 
+    templateName?: string
+    templateID?:number
+    sendAt?: string
+    sendAfter?: number
     nationality?: string
-    gender: string
-    regionID: number
-    contentEn: string
-    contentAr: string
-    run: boolean
+    gender?: string
+    regionID?: number
+    contentEn?: string
+    contentAr?: string
+    run?: boolean
     sendAfterReminder? : number
-    isReminder? : boolean
+  isReminder?: boolean
+   isSendAfter?: boolean
+    sendBefore?: number
+  isSendBefore?: boolean
+  
 }
 
 export class tempList{
@@ -32,6 +36,9 @@ export class tempList{
     sendAfterReminder? : number
     isReminder? : boolean
   status: string
+     isSendAfter: boolean
+    sendBefore: number
+    isSendBefore:boolean
 }
 
 // export class smsProviderTemplate{

@@ -17,14 +17,17 @@ import { AuthState } from 'src/app/autientication/state/auth.state';
   styleUrls: ['./message-control.component.scss']
 })
 export class MessageControlComponent implements OnInit{
+   templateConfigurationForm: FormGroup;
+  
+
+
   englishDynamicContent: string =   `Dear {{Name}},\nfor your appointment on {{date}} at {{time}},\nplease bring your ID proof and insurance details. Thank you for choosing Magrabi Health Care!`;
   arabicdDynamicContent: string =   `عزيزي {{Name}}،\nلتحديد موعدك في {{date}} في {{time}}،\nيُرجى إحضار إثبات هويتك وتفاصيل التأمين. شكرًا لاختيارك مغربي للرعاية الصحية!`;
   breadCrumbItems: Array<{}>;
   selectedTemplateID: any=''; 
   selectedregionID:any='';
   isSelectDisabled:boolean=true;
-  templateConfigurationForm: FormGroup;
-  returnTemplateConfig:tempConfig;
+   returnTemplateConfig:tempConfig;
   templateDetailList:tempList[];
   runTempList:tempList[];
   stoppedTempList:tempList[];
@@ -33,7 +36,9 @@ export class MessageControlComponent implements OnInit{
   showLoader:boolean=true;
   userRole:string='';
   isRegionDisabled = false;
- 
+   isEditMode: boolean = false;
+   selectedType: string ='sendAfterReminder';
+
  
   @Select(MessageState.getAllTemplate)
   getallTemplate$!: Observable<tempList>;
@@ -49,14 +54,22 @@ export class MessageControlComponent implements OnInit{
     private store: Store
  ) {
     this.templateConfigurationForm = this.formBuilder.group({
- isReminder: [false],
-      sendAfter: ['', Validators.required],
-      sendAfterReminder: ['', Validators.required],
-      gender: ['', Validators.required],
-      regionID: ['', Validators.required],
-      contentEn: ['', Validators.required],
-      contentAr: ['', Validators.required]
-    });
+        type: ['sendAfterReminder', Validators.required],
+       sendAt: ['', Validators.required],
+      run: [false],
+      id: [0],
+      templateName: ['', Validators.required],
+      templateID: [0],
+         isReminder: ['sendAfterReminder', Validators.required], // Set default value
+      isSendAfter: [null],
+       sendAfterReminder: [null],
+      sendAfter: [null],
+      sendBefore: [null],
+      gender: [null, Validators.required],
+      regionID: [null, Validators.required],
+      contentEn: [null, Validators.required],
+      contentAr: [null, Validators.required],
+          });
   }
 
  
@@ -65,7 +78,8 @@ export class MessageControlComponent implements OnInit{
     this.subscribeToTemplateState();
     this.getAllTemplates();
     this.subscribeToRoleState();
-
+  this.selectedType = 'sendAfterReminder'; // Set the default selected type
+  this.updatePlaceholderAndValidators();
     this.breadCrumbItems = [{ label: 'Message' }, { label: 'Message Configuration', active: true }];
 
     this.englishDynamicContent = this.englishDynamicContent
@@ -78,26 +92,37 @@ export class MessageControlComponent implements OnInit{
       .replace('{{time}}', '3pm');
         document.getElementById('sendAfter')!.style.display = 'none';
 this.templateConfigurationForm.get('isReminder')?.valueChanges.subscribe(value => {
-      this.toggleSendAfterVisibility(value);
-    });
+  if (value) {
+    this.onTypeChange({ target: { value: 'sendAfterReminder' } });
+    
+  }});
+      this.onTypeChange({ target: { value: 'sendAfterReminder' } });
   }  
- 
-  toggleSendAfterVisibility(isReminder: boolean) {
-    if (isReminder) {
-      document.getElementById('sendAfter')!.style.display = 'none';
-      document.getElementById('sendAfterReminder')!.style.display = 'block';
-    } else {
-      document.getElementById('sendAfter')!.style.display = 'block';
-      document.getElementById('sendAfterReminder')!.style.display = 'none';
-    }
+  onTypeChange(event: any): void {
+    this.selectedType = event.target.value;
+    this.updatePlaceholderAndValidators();
   }
-    onIsReminderChange(isChecked: boolean) {
-      if (isChecked) {
-        this.templateConfigurationForm.get('isReminder')!.setValue(true);
-      } else {
-        this.templateConfigurationForm.get('isReminder')!.setValue(false);
-      }
+   updatePlaceholderAndValidators(): void {
+    const controls = this.templateConfigurationForm.controls;
+    controls['sendAfterReminder'].setValidators(null);
+    controls['sendAfter'].setValidators(null);
+    controls['sendBefore'].setValidators(null);
+
+    if (this.selectedType === 'sendAfterReminder') {
+      controls['sendAfterReminder'].setValidators([Validators.required]);
+    } else if (this.selectedType === 'sendAfter') {
+      controls['sendAfter'].setValidators([Validators.required]);
+    } else if (this.selectedType === 'sendBefore') {
+      controls['sendBefore'].setValidators([Validators.required]);
     }
+
+    controls['sendAfterReminder'].updateValueAndValidity();
+    controls['sendAfter'].updateValueAndValidity();
+    controls['sendBefore'].updateValueAndValidity();
+  }
+
+ 
+  
  
   submit() {
     this.showLoader = true;
@@ -152,15 +177,14 @@ this.templateConfigurationForm.get('isReminder')?.valueChanges.subscribe(value =
 
   onTemplateChange() {
         const selectedTemplate = this.templateDetailList.find(t => t.templateID === this.selectedTemplateID);
-    if (selectedTemplate) {
-      if (selectedTemplate.status === 'Active') {
-        this.templateConfigurationForm.get('isReminder')?.setValue(false);
-        this.toggleSendAfterVisibility(false);
-      } else if (selectedTemplate.status === 'Canceled') {
-        this.templateConfigurationForm.get('isReminder')?.setValue(true);
-        this.toggleSendAfterVisibility(true);
-      }
-    }
+        if (selectedTemplate) {
+          this.templateConfigurationForm.patchValue(selectedTemplate);
+          this.isSelectDisabled = true;
+          this.disableAllInputs();
+        } else {
+          this.isSelectDisabled = false;
+          this.disableAllInputs();
+        }
     const filtered = this.templateDetailList.find((template) => {
       return template.templateID == this.selectedTemplateID;
     });
@@ -182,10 +206,7 @@ this.templateConfigurationForm.get('isReminder')?.valueChanges.subscribe(value =
         });
       }
     });
-     if (this.selectedregionID === '2') { // KSA
-      this.templateConfigurationForm.get('isReminder')?.setValue(false);
-      this.toggleSendAfterVisibility(false);
-    }
+  
     this.getRunTempList(this.selectedregionID);
     this.getSToppedTempList(this.selectedregionID);
   }

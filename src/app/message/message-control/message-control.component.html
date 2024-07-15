@@ -1,247 +1,264 @@
-<p-toast></p-toast>
+ <p-toast></p-toast>
 <app-loading-indicator *ngIf="showLoader"></app-loading-indicator>
 <app-page-title title="Configure Message Template" [breadcrumbItems]="breadCrumbItems"></app-page-title>
-
 <div class="conatiner-fluid">
-    <!-- hint message -->
-    <div class="alert alert-primary d-flex align-items-center my-4" role="alert">
-        <i class='bx bx-info-circle me-2'></i>
-        <div>
+   <!-- hint message -->
+   <div class="alert alert-primary d-flex align-items-center my-4" role="alert">
+      <i class='bx bx-info-circle me-2'></i>
+      <div>
          Please choose a Region First !
-        </div>
-    </div>
-    <!-- error message -->
-    <div *ngIf="(templateDetailList && templateDetailList.length==0)" class="alert alert-danger d-flex align-items-center" role="alert">
-        <i class='bx bx-error me-2' ></i>        
-        <div>
+      </div>
+   </div>
+   <!-- error message -->
+   <div *ngIf="(templateDetailList && templateDetailList.length==0)" class="alert alert-danger d-flex align-items-center" role="alert">
+      <i class='bx bx-error me-2' ></i>        
+      <div>
          There's no templates avilable in this region !
-        </div>
-    </div>
-
-    <div class="content my-4">
-        <div class="card-widget">
-            <div class="container">
-                <div class="row mb-3">
-                    <label class="col-md-auto col-form-label">Region</label>
-                      <div class="col-md">
-                        <select [(ngModel)]="selectedregionID" (change)="onRegionChange()" [disabled]="isRegionDisabled"
-                            class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
-                            <option value="" selected>Select Region</option>
-                            <option value="1">Egypt</option>
-                            <option value="2">KSA</option>
-                            <option value="3">UAE</option>
-                            <option value="4">QATAR</option>
-                        </select>
-                    </div>
-                    <label class="col-md-auto col-form-label">Template Name</label>
-                    <div class="col-md">
-                        <select [(ngModel)]="selectedTemplateID" (change)="onTemplateChange()" [disabled]="isSelectDisabled"
-                            class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
-                            <option value="">Choose your Template</option>
-                            <option *ngFor="let templateDetail of templateDetailList" [value]="templateDetail.templateID">
-                                {{templateDetail.templateName}}
-                            </option>
-                        </select>
-                       
-                    </div>
-                </div>
-             </div>
-        </div>
-    </div>  
-
-
-    <form [formGroup]="templateConfigurationForm" >
-        <div class="page-title-end mt-4 justify-content-between">
-            <h4 class="page-title-text me-auto">Template Configuration</h4>
-            <button  (click)="toggleEditconfig(true)" class="btn btn-outline-dark btn-sm ms-1">
-                <i class='bx bxs-edit-alt'></i>
-                Edit
-            </button>
-            <button 
-            
-            
+      </div>
+   </div>
+   <div class="content my-4">
+      <div class="card-widget">
+         <div class="container">
+            <div class="row mb-3">
+               <label class="col-md-auto col-form-label">Region</label>
+               <div class="col-md">
+                  <select [(ngModel)]="selectedregionID" (change)="onRegionChange()" [disabled]="isRegionDisabled"
+                  class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                  <option value="" selected>Select Region</option>
+                  <option value="1">Egypt</option>
+                  <option value="2">KSA</option>
+                  <option value="3">UAE</option>
+                  <option value="4">QATAR</option>
+                  </select>
+               </div>
+               <label class="col-md-auto col-form-label">Template Name</label>
+               <div class="col-md">
+                  <select required [(ngModel)]="selectedTemplateID" (change)="onTemplateChange()"     [disabled]="isSelectDisabled"
+                  class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                  <option value="">Choose your Template</option>
+                  <option *ngFor="let templateDetail of templateDetailList" [value]="templateDetail.templateID">
+                  {{templateDetail.templateName}}
+                  </option>
+                  </select>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <form [formGroup]="templateConfigurationForm" >
+      <div class="page-title-end mt-4 justify-content-between">
+         <h4 class="page-title-text me-auto">Template Configuration</h4>
+         <button  (click)="toggleEditconfig(true)" class="btn btn-outline-dark btn-sm ms-1">
+         <i class='bx bxs-edit-alt'></i>
+         Edit
+         </button>
+         <button 
             (click)="submit()" 
-                    type="submit" class="btn btn-primary w-xl btn-sm ms-1">Save Template Configuration</button>
-        </div>
-        <div class="content my-4">
-            <div class="card-widget">
-                <div class="container">
-                    <div class="d-flex justify-content-end align-items-center">
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-xl-2 col-sm-6 align-self-center">
-                         
-                                   <div class="d-flex gap-3 align-items-center">
-                                <label class="col-form-label">Is Reminder:</label>
-                                <input formControlName="isReminder" class="isReminderInput form-check-input" type="checkbox">
-                            </div>
-                       <p *ngIf="templateConfigurationForm?.get('isReminder')?.invalid && templateConfigurationForm?.get('isReminder')?.touched"
-               class="text-danger" role="alert">
-                Is Reminder is required.
-            </p>
-        
+            type="submit" class="btn btn-primary w-xl btn-sm ms-1">Save Template Configuration</button>
+      </div>
+      <div class="content my-4">
+         <div class="card-widget">
+            <div class="container">
+               <div class="d-flex justify-content-end align-items-center">
+               </div>
+               <div class="row mb-2 align-items-center">
+<div class="col-xl-6 col-sm-6 align-self-center">
+                     <p class="mb-0">Type : </p>
+  <div class="d-flex gap-3 align-items-center">
+                            <div>
+                           <div class="d-flex gap-3 align-items-center">
+           <input
+  name="type"
+  type="radio"
+  class="form-check-input isReminderInput"
+  formControlName="isReminder"
+  value="sendAfterReminder"
+  (change)="onTypeChange($event)"
+        id="myCheckbox"
+
+/>
+                              <label class="col-form-label">Reminder</label>
+                           </div>
+                           <p *ngIf="templateConfigurationForm?.get('isReminder')?.invalid && templateConfigurationForm?.get('isReminder')?.touched"
+                              class="text-danger" role="alert">
+                              Is Reminder is required.
+                           </p>
                         </div>
-                        <div class="col-xl-2 col-sm-6" id="sendAfter">
-                            <div class="mb-3">
-                                <label class="col-form-label" >Send after :</label>
-                                <!-- <input class="form-control" type="time" value="13:45:00" id="example-time-input" min='01' max='02'> -->
-                               <!-- <select formControlName="sendAfter" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
-                                    <option value="" selected>Send After</option>
-                                    <option value="10">10 Min</option>
-                                    <option value="15">15 Min</option>
-                                    <option value="30">30 Min</option>
-                                </select> -->
-                                <!--container-->
-                                <input type="number" class="form-control" formControlName="sendAfter" id="example-time-input" placeholder="minutes">
-                            </div>
-                                <p *ngIf="templateConfigurationForm?.get('sendAfter')?.invalid && templateConfigurationForm?.get('sendAfter')?.touched"
-               class="text-danger" role="alert">
-                Send After is required.
-            </p>
+                        <div>
+                           <div  class="d-flex gap-3 align-items-center" >
+                     <input
+          name="type"
+          type="radio"
+          class="form-check-input isReminderInput"
+          formControlName="isSendAfter"
+          value="sendAfter"
+          (change)="onTypeChange($event)"
+          
+        />      
+                              <label class="col-form-label" >Send after</label>
+                           </div>
+                           <p *ngIf="templateConfigurationForm?.get('isSendAfter')?.invalid && templateConfigurationForm?.get('isSendAfter')?.touched"
+                              class="text-danger" role="alert">
+                              Send After is required.
+                           </p>
                         </div>
-                         
-
-  <div class="col-xl-2 col-sm-6" id="sendAfterReminder">
-                            <div class="mb-3">
-                                <label class="col-form-label" >Send after Reminder :</label>
-                                <!-- <input class="form-control" type="time" value="13:45:00" id="example-time-input" min='01' max='02'> -->
-                               <!-- <select formControlName="sendAfterReminder" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
-                                    <option value="" selected>Send After Reminder</option>
-                                    <option value="1">1 Month</option>
-                                    <option value="2">2 Months</option>
-                                    <option value="3">3 Months</option>
-                                </select> -->
-                                <input  type="number" class="form-control" formControlName="sendAfterReminder" id="example-time-input" placeholder="months">
-                                <!--container-->
-                            </div>
-                            <p *ngIf="templateConfigurationForm?.get('sendAfterReminder')?.invalid && templateConfigurationForm?.get('sendAfterReminder')?.touched"
-                                class="text-danger"  role="alert">
-                                Send After Reminder  is required.
-                            </p>
+                        <div>
+                           <div  class="d-flex gap-3 align-items-center" >
+                     <input 
+          name="type"
+          type="radio"
+          class="form-check-input isReminderInput"
+          formControlName="isSendBefore"
+          value="sendBefore"
+          (change)="onTypeChange($event)"
+       
+        />
+                           <label class="col-form-label" >Send Before</label>
+                           </div>
+                           <p *ngIf="templateConfigurationForm?.get('isSendBefore')?.invalid && templateConfigurationForm?.get('isSendBefore')?.touched"
+                              class="text-danger"  role="alert">
+                              Send After Reminder  is required.
+                           </p>
                         </div>
-
-
-
-
-
-                        <div  class="col-xl col-sm-6">
-                            <div  class="mb-3">
-                                <label class="col-form-label">Gender</label>
-                                <select formControlName="gender" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
-                                    <option value="">Select Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="null">Both Gender</option>
-                                </select>
-                            </div>
-                            <p *ngIf="templateConfigurationForm?.get('gender')?.invalid && templateConfigurationForm?.get('gender')?.touched"
-                                class="text-danger"  role="alert">
-                                Gender is required.
-                            </p>
-                        </div>
-                        <div  class="col-xl-4 col-sm-6">
-                            <div  class="mb-3">
-                                <label class="col-form-label" >Region</label>
-                                <select formControlName="regionID" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy">
-                                    <option value="" selected >Select Region</option>
-                                    <option value="1"  >Egypt</option>
-                                    <option value="2" >KSA</option>
-                                    <option value="3" >UAE</option>
-                                    <option value="4" >QATAR</option>
-                                </select>
-                            </div>
-                            <p *ngIf="templateConfigurationForm?.get('regionID')?.invalid && templateConfigurationForm?.get('regionID')?.touched"
-                                class="text-danger"  role="alert">
-                                Region is required.
-                            </p>
-                        </div>
-                        <div class="mb-3">
-                            <label >Sms English Content</label>
-                            <textarea formControlName="contentEn" [(ngModel)]="englishDynamicContent"  class="form-control" rows="3" style="height: auto;"></textarea>
-                        </div>
-                        <p *ngIf="templateConfigurationForm?.get('contentEn')?.invalid && templateConfigurationForm?.get('contentEn')?.touched"
-                            class="text-danger"  role="alert">
-                            English content is required.
-                        </p>
-                        <div class="mb-3">
-                            <label >Sms Arabic Content</label>
-                            <textarea formControlName="contentAr" [(ngModel)]="arabicdDynamicContent "  class="form-control" rows="3" style="height: auto;text-align: right;"></textarea>
-                        </div>
-                        <p *ngIf="templateConfigurationForm?.get('contentAr')?.invalid && templateConfigurationForm?.get('contentAr')?.touched"
-                            class="text-danger"  role="alert">
-                            Arabic content is required.
-                        </p>
-                    </div>
-                </div>
-            </div>  
-        </div>              
-
-    </form>
-
-
-    <div class="page-title-end mt-4 justify-content-between mb-4">
-        <h4 class="page-title-text me-auto">Run & Stopped Template</h4>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="card-widget h-100">
-                <div class="card-title"><h4>Runned Templates</h4></div>
-                <ul class="roles-list">
-                  <li *ngFor="let temp of runTempList">
-                   
-                    <a class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <span class="avatar-title rounded-circle">
-                                {{temp.templateName.charAt(0)}}
-                            </span>
-                            <Span>{{temp.templateName}}</Span>
-                        </div>
-                        <button  (click)="updateTemplateStatus(temp)"  class="btn btn-danger btn-sm">Stop</button>                
-                    </a>
-                </li>
-                <li *ngIf="runTempList && runTempList.length==0">
-                    <div class="error-s">
-                        <i><img src="../../../assets/images/empty-page.svg" alt=""></i>
-                        <h1>There's no records to show <span>!</span></h1>
-                      </div>                
-                    </li>
-                  
-                </ul>
-              </div><!--card-widget-->
-        </div>
-        <div class="col-lg-6">
-            <div class="card-widget h-100">
-                <div class="card-title"><h4>Stopped Templates</h4></div>
-                <ul class="roles-list">
-                  <li *ngFor="let temp of stoppedTempList">
-                   
-                    <a class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <span class="avatar-title rounded-circle">
-                                {{temp.templateName.charAt(0)}}
-                            </span>
-                            <Span>{{temp.templateName}}</Span>
-                        </div>
-                      
-                        <button  (click)="updateTemplateStatus(temp)"  class="btn btn-success btn-sm">Run</button>
-                    
-                    </a>
-                </li>
-                <li *ngIf="stoppedTempList && stoppedTempList.length==0">
-                    <div class="error-s">
-                        <i><img src="../../../assets/images/empty-page.svg" alt=""></i>
-                        <h1>There's no records to show <span>!</span></h1>
-                      </div>
-                </li>
-                  
-                </ul>
-              </div><!--card-widget-->
-        </div>
-    </div>
-
-        
-
+                         <div *ngIf="selectedType === 'sendAfterReminder'">
+   <input
+      type="number"
+      placeholder="days"
+      formControlName="sendAfterReminder"
+      class="form-control select2-search-disable"
+    
+    />
+  </div>
+                       <div *ngIf="selectedType === 'sendAfter'">
+      <input
+      type="number"
+      placeholder="minutes"
+      formControlName="sendAfter"
+      class="form-control select2-search-disable"
+ 
+    />
+  </div>
+                     <div *ngIf="selectedType === 'sendBefore'">
+    <input
+      type="number"
+      placeholder="Hours"
+      formControlName="sendBefore"
+      class="form-control select2-search-disable"      
+    />
+  </div>
+                     </div>
+                               
+                  </div>
+                 
+                  <div  class=" col-sm-2">
+                     <div  class="mb-3">
+                        <label class="col-form-label">Gender</label>
+                        <select formControlName="gender" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                           <option value="">Select Gender</option>
+                           <option value="Male">Male</option>
+                           <option value="Female">Female</option>
+                           <option value="null">Both Gender</option>
+                        </select>
+                     </div>
+                     <p *ngIf="templateConfigurationForm?.get('gender')?.invalid && templateConfigurationForm?.get('gender')?.touched"
+                        class="text-danger"  role="alert">
+                        Gender is required.
+                     </p>
+                  </div>
+                  <div  class="col-xl-4 col-sm-6">
+                     <div  class="mb-3">
+                        <label class="col-form-label" >Region</label>
+                        <select formControlName="regionID" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty" ng-reflect-model="Buy">
+                           <option value="" selected >Select Region</option>
+                           <option value="1"  >Egypt</option>
+                           <option value="2" >KSA</option>
+                           <option value="3" >UAE</option>
+                           <option value="4" >QATAR</option>
+                        </select>
+                     </div>
+                     <p *ngIf="templateConfigurationForm?.get('regionID')?.invalid && templateConfigurationForm?.get('regionID')?.touched"
+                        class="text-danger"  role="alert">
+                        Region is required.
+                     </p>
+                  </div>
+                  <div class="mb-3">
+                     <label >Sms English Content</label>
+                     <textarea formControlName="contentEn" [(ngModel)]="englishDynamicContent"  class="form-control" rows="3" style="height: auto;"></textarea>
+                  </div>
+                  <p *ngIf="templateConfigurationForm?.get('contentEn')?.invalid && templateConfigurationForm?.get('contentEn')?.touched"
+                     class="text-danger"  role="alert">
+                     English content is required.
+                  </p>
+                  <div class="mb-3">
+                     <label >Sms Arabic Content</label>
+                     <textarea formControlName="contentAr" [(ngModel)]="arabicdDynamicContent "  class="form-control" rows="3" style="height: auto;text-align: right;"></textarea>
+                  </div>
+                  <p *ngIf="templateConfigurationForm?.get('contentAr')?.invalid && templateConfigurationForm?.get('contentAr')?.touched"
+                     class="text-danger"  role="alert">
+                     Arabic content is required.
+                  </p>
+               </div>
+            </div>
+         </div>
+      </div>
+   </form>
+   <div class="page-title-end mt-4 justify-content-between mb-4">
+      <h4 class="page-title-text me-auto">Run & Stopped Template</h4>
+   </div>
+   <div class="row">
+      <div class="col-lg-6">
+         <div class="card-widget h-100">
+            <div class="card-title">
+               <h4>Runned Templates</h4>
+            </div>
+            <ul class="roles-list">
+               <li *ngFor="let temp of runTempList">
+                  <a class="d-flex justify-content-between align-items-center">
+                     <div class="d-flex align-items-center">
+                        <span class="avatar-title rounded-circle">
+                        {{temp.templateName.charAt(0)}}
+                        </span>
+                        <Span>{{temp.templateName}}</Span>
+                     </div>
+                     <button  (click)="updateTemplateStatus(temp)"  class="btn btn-danger btn-sm">Stop</button>                
+                  </a>
+               </li>
+               <li *ngIf="runTempList && runTempList.length==0">
+                  <div class="error-s">
+                     <i><img src="../../../assets/images/empty-page.svg" alt=""></i>
+                     <h1>There's no records to show <span>!</span></h1>
+                  </div>
+               </li>
+            </ul>
+         </div>
+         <!--card-widget-->
+      </div>
+      <div class="col-lg-6">
+         <div class="card-widget h-100">
+            <div class="card-title">
+               <h4>Stopped Templates</h4>
+            </div>
+            <ul class="roles-list">
+               <li *ngFor="let temp of stoppedTempList">
+                  <a class="d-flex justify-content-between align-items-center">
+                     <div class="d-flex align-items-center">
+                        <span class="avatar-title rounded-circle">
+                        {{temp.templateName.charAt(0)}}
+                        </span>
+                        <Span>{{temp.templateName}}</Span>
+                     </div>
+                     <button  (click)="updateTemplateStatus(temp)"  class="btn btn-success btn-sm">Run</button>
+                  </a>
+               </li>
+               <li *ngIf="stoppedTempList && stoppedTempList.length==0">
+                  <div class="error-s">
+                     <i><img src="../../../assets/images/empty-page.svg" alt=""></i>
+                     <h1>There's no records to show <span>!</span></h1>
+                  </div>
+               </li>
+            </ul>
+         </div>
+         <!--card-widget-->
+      </div>
+   </div>
 </div>
-
-
-
