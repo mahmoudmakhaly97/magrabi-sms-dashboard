@@ -132,6 +132,9 @@ this.templateConfigurationForm.get('isReminder')?.valueChanges.subscribe(value =
           if (response) {
             this.disableAllInputs();
             this.showLoader = false;
+                     // Reset the form fields
+          this.templateConfigurationForm.reset();
+          this.initializeForm(); // Optionally reinitialize to set defaults
           }
         },
         (error) => {
@@ -140,7 +143,25 @@ this.templateConfigurationForm.get('isReminder')?.valueChanges.subscribe(value =
       );
   }
 
-
+initializeForm() {
+  this.templateConfigurationForm = this.formBuilder.group({
+    type: ['sendAfterReminder', Validators.required],
+    sendAt: ['', Validators.required],
+    run: [false],
+    id: [0],
+    templateName: ['', Validators.required],
+    templateID: [0],
+    isReminder: ['sendAfterReminder', Validators.required],
+    isSendAfter: [null],
+    sendAfterReminder: [null],
+    sendAfter: [null],
+    sendBefore: [null],
+    gender: [null, Validators.required],
+    regionID: [null, Validators.required],
+    contentEn: [null, Validators.required],
+    contentAr: [null, Validators.required],
+  });
+}
 
   toggleEditconfig(status: boolean) {
     const formControls = this.templateConfigurationForm.controls;
