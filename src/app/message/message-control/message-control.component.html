@@ -70,22 +70,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-xl-2 col-sm-6 align-self-center">
-                            <!-- <div class="d-flex gap-3 align-items-center">
-                                <label  class="col-form-label" >Is Reminder :</label> 
-                                <input formControlName="isReminder"
-                                onchange="if(this.checked){
-                                    document.getElementById('sendAfter').style.display='none';
-                                    document.getElementById('sendAfterReminder').style.display='block';
-
-                                }else{      document.getElementById('sendAfter').style.display='block';
-                                    document.getElementById('sendAfterReminder').style.display='none';
-                                    }"
-       [checked]="templateConfigurationForm?.get('isReminder')?.value"
-   
-       class="isReminderInput form-check-input"
-       type="checkbox">
- 
-                            </div> -->
+                         
                                    <div class="d-flex gap-3 align-items-center">
                                 <label class="col-form-label">Is Reminder:</label>
                                 <input formControlName="isReminder" class="isReminderInput form-check-input" type="checkbox">
@@ -100,13 +85,14 @@
                             <div class="mb-3">
                                 <label class="col-form-label" >Send after :</label>
                                 <!-- <input class="form-control" type="time" value="13:45:00" id="example-time-input" min='01' max='02'> -->
-                               <select formControlName="sendAfter" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                               <!-- <select formControlName="sendAfter" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
                                     <option value="" selected>Send After</option>
                                     <option value="10">10 Min</option>
                                     <option value="15">15 Min</option>
                                     <option value="30">30 Min</option>
-                                </select>
+                                </select> -->
                                 <!--container-->
+                                <input type="number" class="form-control" formControlName="sendAfter" id="example-time-input" placeholder="minutes">
                             </div>
                                 <p *ngIf="templateConfigurationForm?.get('sendAfter')?.invalid && templateConfigurationForm?.get('sendAfter')?.touched"
                class="text-danger" role="alert">
@@ -119,12 +105,13 @@
                             <div class="mb-3">
                                 <label class="col-form-label" >Send after Reminder :</label>
                                 <!-- <input class="form-control" type="time" value="13:45:00" id="example-time-input" min='01' max='02'> -->
-                               <select formControlName="sendAfterReminder" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
+                               <!-- <select formControlName="sendAfterReminder" class="form-control form-select select2-search-disable ng-valid ng-touched ng-dirty">
                                     <option value="" selected>Send After Reminder</option>
                                     <option value="1">1 Month</option>
                                     <option value="2">2 Months</option>
                                     <option value="3">3 Months</option>
-                                </select>
+                                </select> -->
+                                <input  type="number" class="form-control" formControlName="sendAfterReminder" id="example-time-input" placeholder="months">
                                 <!--container-->
                             </div>
                             <p *ngIf="templateConfigurationForm?.get('sendAfterReminder')?.invalid && templateConfigurationForm?.get('sendAfterReminder')?.touched"
