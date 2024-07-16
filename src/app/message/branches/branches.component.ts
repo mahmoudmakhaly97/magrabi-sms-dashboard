@@ -71,7 +71,8 @@ export class BranchesComponent implements OnInit {
       bearerT: ['', Validators.required],
       spapiLink: ['', Validators.required],
       active: [true, Validators.required], 
-       
+       allBranchList:  []  , // Initialize empty array or fetch initial data from service
+      editMode : false
      });
   }
 
@@ -87,7 +88,7 @@ export class BranchesComponent implements OnInit {
  
 
  
-  getEmailsArray(): string[] {
+getEmailsArray(): string[] {
     return this.addBranchForm.get('emailsAdmin')!.value.split(',');
 }
 getPhonesArray(){
@@ -118,6 +119,7 @@ removePhone(phone: string): void {
   const updatedPhones = currentPhones.filter(e => e !== phone).join(',');
   this.addBranchForm.get('mobilesAdmin')!.setValue(updatedPhones);
 }
+  
   subscribeToRoleState() {
     this.role$.subscribe((response: any) => {
       if (response) {
