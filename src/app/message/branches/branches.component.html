@@ -102,8 +102,7 @@
 <div class="row mb-3">
     <label class="col-md-3 col-form-label">Admin Emails</label>
     <div class="col-md-9">
-        <div *ngIf="emailMessage" class="alert alert-success">{{ emailMessage }}</div>
-        <div class="form-control mt-3" style="height: auto; min-height: 38px;">
+         <div class="form-control mt-3" style="height: auto; min-height: 38px;">
             <div *ngFor="let email of getEmailsArray()" class="email-pill">
                 {{ email }}
                 <span (click)="removeEmail(email)" class="email-remove">x</span>
@@ -117,14 +116,14 @@
 <div class="row mb-3">
     <label class="col-md-3 col-form-label">Admin Phone Numbers</label>
     <div class="col-md-9">
-        <div *ngIf="phoneMessage" class="alert alert-success">{{ phoneMessage }}</div>
-        <div class="form-control mt-3" style="height: auto; min-height: 38px;">
+         <div class="form-control mt-3" style="height: auto; min-height: 38px;">
             <div *ngFor="let phone of getPhonesArray()" class="email-pill">
                 {{ phone }}
                 <span (click)="removePhone(phone)" class="email-remove">x</span>
             </div>
             <input formControlName="mobilesAdmin" id="phones" #newPhone (keydown.enter)="addPhone(newPhone.value); updateEmailsAndPhones();$event.preventDefault()" class="form-control form-control-sm" type="text" placeholder="Add new phone..." />
  
+
         </div>
      </div>
 </div>

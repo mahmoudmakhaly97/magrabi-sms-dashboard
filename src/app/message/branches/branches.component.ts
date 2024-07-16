@@ -126,8 +126,7 @@ export class BranchesComponent implements OnInit {
         this.addBranchForm.get('mobilesAdmin')!.setValue(this.currentPhones.join(',')); // Update form control
 
         // Optionally, you can show a message or handle success here
-        this.emailMessage = 'Emails and phones updated successfully.'; // Success message
-    }
+     }
 
     removeEmail(email: string): void {
         this.currentEmails = this.currentEmails.filter(e => e !== email); // Remove email
