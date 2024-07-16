@@ -35,7 +35,15 @@ export class BranchesComponent implements OnInit {
   spapiLink: string = '';
   sender: string = '';
   bearerT: string = '';
+    @ViewChild('newEmail') newEmail!: ElementRef;
+    @ViewChild('newPhone') newPhone!: ElementRef;
+ 
+     emailMessage: string = '';
+    phoneMessage: string = '';
+    currentEmails: string[] = [];
+    currentPhones: string[] = [];
 
+ 
 
    @Select(branchState.getbranches)
   getAllBranches$!: Observable<any>;
@@ -57,11 +65,11 @@ export class BranchesComponent implements OnInit {
       nameAr: ['', Validators.required],
       branchCode: ['', Validators.required],
       googleReviewLink: ['', Validators.required],
-      emailsAdmin: ['', Validators.required],
+    emailsAdmin: [''], // Initialize with an empty string
+            mobilesAdmin: [''] , 
       geoLocation: ['', Validators.required],
       regionID: ['', Validators.required],
-      mobilesAdmin: ['', Validators.required],
-      sender: ['', Validators.required],
+       sender: ['', Validators.required],
       portNum: ['', Validators.required],
       serverIP: ['', Validators.required],
       serverName: ['', Validators.required],
@@ -71,8 +79,11 @@ export class BranchesComponent implements OnInit {
       bearerT: ['', Validators.required],
       spapiLink: ['', Validators.required],
       active: [true, Validators.required], 
+      
+
        allBranchList:  []  , // Initialize empty array or fetch initial data from service
-      editMode : false
+      editMode: false, 
+    
      });
   }
 
@@ -88,38 +99,62 @@ export class BranchesComponent implements OnInit {
  
 
  
-getEmailsArray(): string[] {
-    return this.addBranchForm.get('emailsAdmin')!.value.split(',');
-}
-getPhonesArray(){
-  return this.addBranchForm.get('mobilesAdmin')!.value.split(',');
+     getEmailsArray(): string[] {
+        return this.currentEmails;
+    }
 
-}
+    getPhonesArray(): string[] {
+        return this.currentPhones;
+    }    addEmail(email: string): void {
+        const trimmedEmail = email.trim();
+        
+        if (trimmedEmail && !this.currentEmails.includes(trimmedEmail)) {
+            this.currentEmails.push(trimmedEmail); // Append new email
+            this.emailMessage = `'${trimmedEmail}' has been added.`; // Success message
+        } else if (this.currentEmails.includes(trimmedEmail)) {
+            this.emailMessage = `'${trimmedEmail}' is already in the list.`; // Duplicate message
+        } else {
+            this.emailMessage = 'Please enter a valid email.'; // Empty input message
+        }
 
-addEmail(email: string): void {
-    const currentEmails = this.addBranchForm.get('emailsAdmin')!.value;
-    const updatedEmails = currentEmails ? `${currentEmails},${email}` : email;
-    this.addBranchForm.get('emailsAdmin')!.setValue(updatedEmails);
-    // Clear the input field after adding email
-}
-addPhone(phone: string): void {
-  const currentPhones = this.addBranchForm.get('mobilesAdmin')!.value;
-  const updatedPhones= currentPhones ? `${currentPhones},${phone}` : phone;
-  this.addBranchForm.get('mobilesAdmin')!.setValue(updatedPhones);
-  // Clear the input field after adding email
-}
-removeEmail(email: string): void {
-    const currentEmails = this.addBranchForm.get('emailsAdmin')!.value.split(',');
-    const updatedEmails = currentEmails.filter(e => e !== email).join(',');
-    this.addBranchForm.get('emailsAdmin')!.setValue(updatedEmails);
-}
+        // Clear the input field
+        this.newEmail.nativeElement.value = '';
+    }
+       updateEmailsAndPhones(): void {
+        // Set the form control values to include all emails and phones
+        this.addBranchForm.get('emailsAdmin')!.setValue(this.currentEmails.join(',')); // Update form control
+        this.addBranchForm.get('mobilesAdmin')!.setValue(this.currentPhones.join(',')); // Update form control
 
-removePhone(phone: string): void {
-  const currentPhones = this.addBranchForm.get('mobilesAdmin')!.value.split(',');
-  const updatedPhones = currentPhones.filter(e => e !== phone).join(',');
-  this.addBranchForm.get('mobilesAdmin')!.setValue(updatedPhones);
-}
-  
+        // Optionally, you can show a message or handle success here
+        this.emailMessage = 'Emails and phones updated successfully.'; // Success message
+    }
+
+    removeEmail(email: string): void {
+        this.currentEmails = this.currentEmails.filter(e => e !== email); // Remove email
+    }
+
+    removePhone(phone: string): void {
+        this.currentPhones = this.currentPhones.filter(p => p !== phone); // Remove phone
+    }
+ 
+   addPhone(phone: string): void {
+        const trimmedPhone = phone.trim();
+        
+        if (trimmedPhone && !this.currentPhones.includes(trimmedPhone)) {
+            this.currentPhones.push(trimmedPhone); // Append new phone
+            this.phoneMessage = `'${trimmedPhone}' has been added.`; // Success message
+        } else if (this.currentPhones.includes(trimmedPhone)) {
+            this.phoneMessage = `'${trimmedPhone}' is already in the list.`; // Duplicate message
+        } else {
+            this.phoneMessage = 'Please enter a valid phone number.'; // Empty input message
+        }
+
+        // Clear the input field
+        this.newPhone.nativeElement.value = '';
+    }
+ 
+
+   
   subscribeToRoleState() {
     this.role$.subscribe((response: any) => {
       if (response) {
@@ -227,7 +262,7 @@ submit() {
            this.editMode = false;
                   this.getAllBranchesList();
 
-          this.updateButtonText("Create Branch"); 
+          
           //  window.location.reload();
 
           
