@@ -16,7 +16,8 @@ import { TagModule } from 'primeng/tag';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { BranchesComponent } from './branches/branches.component';
-
+import { HealthLinkHistoryComponent } from './healthLink-history/healthLink-history.component';
+ 
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { BranchesComponent } from './branches/branches.component';
     SmsHistoryComponent,
     TemplateQueueComponent,
     BranchesComponent,
+    HealthLinkHistoryComponent
   ],
   imports: [
     CommonModule,

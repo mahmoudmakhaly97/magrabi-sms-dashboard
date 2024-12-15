@@ -1,0 +1,69 @@
+
+
+
+  <div class="content mt-5">
+    <div class="card-widget">
+          <div class="page-title">
+            <h4 class="page-title-text me-auto">HealthLink History</h4>
+            <div class="page-title-end">
+            </div>
+          </div>
+
+          <div #table class="table-responsive">
+            <p-table
+            [value]="filterResult"
+            [paginator]="true"
+            [rows]="rows"
+            [(first)]="first"
+            [showCurrentPageReport]="true"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [rowsPerPageOptions]="[5, 10, 20]"
+            class="table table-striped"
+            (onPage)="onPageChange($event)"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width:7.14%">Survey Type</th>
+                <th style="width:7.14%">Branch Code</th>
+                <th style="width:7.14%">Department</th>
+                <th style="width:7.14%">Doctor Code</th>
+                <th style="width:7.14%">Mobile Number</th>
+                <th style="width:7.14%">Day</th>
+                <th style="width:7.14%">Month</th>
+                <th style="width:7.14%">Year</th>
+                <th style="width:7.14%">Gender</th>
+                <th style="width:7.14%">Nationality</th>
+                <th style="width:7.14%">Payment Type</th>
+                <th style="width:7.14%">Patient Name</th>
+                <th style="width:7.14%">Surgeries Group</th>
+                <th style="width:7.14%">Response</th>
+              </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="body" let-result>
+              <tr>
+                <td>{{ result.surveyType }}</td>
+                <td>{{ result.abhscd }}</td>
+                <td>{{ result.dmspC1 }}</td>
+                <td>{{ result.dmdrn }}</td>
+                <td>{{ result.pbpttl }}</td>
+                <td>{{ result.day }}</td>
+                <td>{{ result.month }}</td>
+                <td>{{ result.year }}</td>
+                <td>{{ result.gender }}</td>
+                <td>{{ result.nationen }}</td>
+                <td>{{ result.paymenT_TYPE }}</td>
+                <td>{{ result.pbptna }}</td>
+                <td>{{ result.boK_STS }}</td>
+                <td>{{ result.response | json }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          
+          </div>
+    </div>
+  </div>
+
+
+
